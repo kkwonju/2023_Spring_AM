@@ -17,14 +17,37 @@ public class UsrArticleController {
 	public UsrArticleController() {
 		this.lastArticleId = 0;
 		this.articles = new ArrayList<>();
+		
+		makeTestData();
 	}
+	
+	private void makeTestData() {
+		for(int i = 1; i <= 10; i++) {
+			String title = "제목" + i;
+			String body = "내용"  + i;
+			
+			writeArticle(title, body);
+		}
+	}
+	
+	public Article writeArticle(String title, String body) {
+		int id = lastArticleId + 1;
+		
+		Article article	= new Article(id, title, body);
+		articles.add(article);
+		lastArticleId++;
+		
+		return article;
+	}
+	
 	@RequestMapping("/usr/article/doAdd")
 	@ResponseBody
-	public String doAdd(String title, String body) {
+	public Article doAdd(String title, String body) {
 		int id = lastArticleId + 1;
+		Article article	= new Article(id, title, body);
+		articles.add(article);
 		lastArticleId++;
-		articles.add(new Article(id, title, body));
-		return String.format("%d번 Article 추가됨", id);
+		return article;
 	}
 
 	@RequestMapping("/usr/article/getArticles")
@@ -32,5 +55,4 @@ public class UsrArticleController {
 	public List<Article> getArticles() {
 		return articles;
 	}
-
 }
