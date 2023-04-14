@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Update;
 
 import com.KoreaIT.kkwo.demo.vo.Article;
 
+// dependency 충돌 시 .m2 repository 삭제 후 sts 재실행
 @Mapper
 public interface ArticleRepository {
 	
