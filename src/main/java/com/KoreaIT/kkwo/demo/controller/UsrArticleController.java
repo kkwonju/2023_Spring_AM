@@ -1,104 +1,78 @@
 package com.KoreaIT.kkwo.demo.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.KoreaIT.kkwo.demo.service.ArticleService;
 import com.KoreaIT.kkwo.demo.vo.Article;
 
 @Controller
 public class UsrArticleController {
-	int lastArticleId;
-	List<Article> articles;
-
-	public UsrArticleController() {
-		this.lastArticleId = 0;
-		this.articles = new ArrayList<>();
-
-		makeTestData();
-	}
+	@Autowired // 자동 연결
+	private ArticleService articleService;
 	
-	// 서비스 메서드
-	private void makeTestData() {
-		for (int i = 1; i <= 10; i++) {
-			String title = "제목" + i;
-			String body = "내용" + i;
-
-			writeArticle(title, body);
-		}
-	}
+//	public UsrArticleController() {
+//	}
 	
-	// 서비스 메서드
-	public Article writeArticle(String title, String body) {
-		int id = lastArticleId + 1;
+	/*
+	위의 @Autowired 어노테이션은 Spring 프레임워크에서 제공하는 
+	의존성 주입(Dependency Injection) 기능을 사용하기 위한 것입니다. 
+	@Autowired가 붙은 필드에 대한 의존성 주입은 해당 클래스의 
+	인스턴스 생성 후, 스프링 컨테이너가 해당 클래스의 객체를 생성할 때 실행됩니다.
 
-		Article article = new Article(id, title, body);
-		articles.add(article);
-		lastArticleId++;
-
-		return article;
-	}
+	따라서, @Autowired로 주입되는 ArticleService 객체는 UsrArticleController 객체가
+	 생성된 이후에 주입됩니다. 그리고 생성자는 객체 생성 시에 실행되므로, 
+	 UsrArticleController의 생성자가 먼저 실행됩니다.
+	 */
 	
 	// 액션 메서드
 	@RequestMapping("/usr/article/doAdd")
 	@ResponseBody
 	public Article doAdd(String title, String body) {
-		int id = lastArticleId + 1;
-		Article article = new Article(id, title, body);
-		articles.add(article);
-		lastArticleId++;
+		Article article = articleService.writeArticle(title, body);
 		return article;
 	}
-	
+
 	// 액션 메서드
 	@RequestMapping("/usr/article/getArticles")
 	@ResponseBody
 	public List<Article> getArticles() {
-		return articles;
+		return articleService.getArticles();
 	}
 
-	
-	public Article getArticleByInputedId(int id) {
-		for (Article article : articles) {
-			if(article.getId() == id) {
-				return article;
-			}
-		}
-		return null;
-	}
-	
-	public void deleteArticle(int id) {
-		Article article = getArticleByInputedId(id);
-		articles.remove(article);
-	}
-	public void modifyArticle(int id, String title, String body) {
-		Article article = getArticleByInputedId(id);
-		article.setTitle(title);
-		article.setBody(body);
-	}
-	
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
 	public String doDelete(int id) {
-		Article article = getArticleByInputedId(id);
-		if(article == null) {
+		Article article = articleService.getArticleByInputedId(id);
+		if (article == null) {
 			return String.format("%d번 글은 존재하지 않습니다", id);
 		}
-		deleteArticle(id);
+		articleService.deleteArticle(id);
 		return String.format("%d번 글이 삭제되었습니다", id);
 	}
-	
+
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(int id, String title, String body) {
-		Article article = getArticleByInputedId(id);
-		if(article == null) {
+	public Object doModify(int id, String title, String body) {
+		Article article = articleService.getArticleByInputedId(id);
+		if (article == null) {
 			return String.format("%d번 글은 존재하지 않습니다", id);
 		}
-		modifyArticle(id, title, body);
-		return String.format("%d번 글이 수정되었습니다", id);
+		articleService.modifyArticle(id, title, body);
+		return article;
+	}
+
+	@RequestMapping("/usr/article/getArticle")
+	@ResponseBody
+	public Object getArticle(int id) {
+		Article article = articleService.getArticleByInputedId(id);
+		if (article == null) {
+			return String.format("%d번 글은 존재하지 않습니다", id);
+		}
+		return article;
 	}
 }
