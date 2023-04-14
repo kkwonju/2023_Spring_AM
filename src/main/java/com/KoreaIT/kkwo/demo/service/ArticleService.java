@@ -11,15 +11,15 @@ import com.KoreaIT.kkwo.demo.vo.Article;
 public class ArticleService {
 	// @Autowired
 	private ArticleRepository articleRepository;
-	
+
 	/* @Autowired 보다 생성자가 먼저 실행 */
 	public ArticleService(ArticleRepository articleRepository) {
 		this.articleRepository = articleRepository;
-		articleRepository.makeTestData();
 	}
-	
-	public Article writeArticle(String title, String body) {
-		return articleRepository.writeArticle(title, body);
+
+	public int writeArticle(String title, String body) {
+		articleRepository.writeArticle(title, body);
+		return articleRepository.getLastInsertId();
 	}
 
 	public List<Article> getArticles() {

@@ -29,20 +29,7 @@ public class UsrArticleController {
 	 UsrArticleController의 생성자가 먼저 실행됩니다.
 	 */
 	
-	// 액션 메서드
-	@RequestMapping("/usr/article/doAdd")
-	@ResponseBody
-	public Article doAdd(String title, String body) {
-		Article article = articleService.writeArticle(title, body);
-		return article;
-	}
 
-	// 액션 메서드
-	@RequestMapping("/usr/article/getArticles")
-	@ResponseBody
-	public List<Article> getArticles() {
-		return articleService.getArticles();
-	}
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
@@ -66,6 +53,21 @@ public class UsrArticleController {
 		return article;
 	}
 
+	// 액션 메서드
+	@RequestMapping("/usr/article/doAdd")
+	@ResponseBody
+	public Article doAdd(String title, String body) {
+		int id = articleService.writeArticle(title, body);
+		Article article = articleService.getArticleByInputedId(id);
+		return article;
+	}
+	
+	@RequestMapping("/usr/article/getArticles")
+	@ResponseBody
+	public List<Article> getArticles() {
+		return articleService.getArticles();
+	}
+	
 	@RequestMapping("/usr/article/getArticle")
 	@ResponseBody
 	public Object getArticle(int id) {
