@@ -30,7 +30,6 @@ public class MemberService {
 		return id;
 	}
 
-
 	public Member getMemberById(int id) {
 		return memberRepository.getMemberById(id);
 	}
