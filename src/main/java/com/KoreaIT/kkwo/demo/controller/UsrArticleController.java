@@ -31,7 +31,7 @@ public class UsrArticleController {
 	
 
 
-	@RequestMapping("/usr/article/doDelete")
+	@RequestMapping("/usr/article/delete")
 	@ResponseBody
 	public String doDelete(int id) {
 		Article article = articleService.getArticleByInputedId(id);
@@ -42,7 +42,7 @@ public class UsrArticleController {
 		return String.format("%d번 글이 삭제되었습니다", id);
 	}
 
-	@RequestMapping("/usr/article/doModify")
+	@RequestMapping("/usr/article/modify")
 	@ResponseBody
 	public Object doModify(int id, String title, String body) {
 		Article article = articleService.getArticleByInputedId(id);
@@ -50,25 +50,26 @@ public class UsrArticleController {
 			return String.format("%d번 글은 존재하지 않습니다", id);
 		}
 		articleService.modifyArticle(id, title, body);
+		article = articleService.getArticleByInputedId(id);
 		return article;
 	}
 
 	// 액션 메서드
-	@RequestMapping("/usr/article/doAdd")
+	@RequestMapping("/usr/article/write")
 	@ResponseBody
-	public Article doAdd(String title, String body) {
+	public Article doWrite(String title, String body) {
 		int id = articleService.writeArticle(title, body);
 		Article article = articleService.getArticleByInputedId(id);
 		return article;
 	}
 	
-	@RequestMapping("/usr/article/getArticles")
+	@RequestMapping("/usr/article/list")
 	@ResponseBody
 	public List<Article> getArticles() {
 		return articleService.getArticles();
 	}
 	
-	@RequestMapping("/usr/article/getArticle")
+	@RequestMapping("/usr/article/article")
 	@ResponseBody
 	public Object getArticle(int id) {
 		Article article = articleService.getArticleByInputedId(id);

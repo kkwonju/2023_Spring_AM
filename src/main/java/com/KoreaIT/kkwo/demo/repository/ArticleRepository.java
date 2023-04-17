@@ -14,7 +14,7 @@ import com.KoreaIT.kkwo.demo.vo.Article;
 @Mapper
 public interface ArticleRepository {
 	
-	public Article writeArticle(String title, String body);
+	public void writeArticle(String title, String body);
 	
 	public List<Article> getArticles();
 

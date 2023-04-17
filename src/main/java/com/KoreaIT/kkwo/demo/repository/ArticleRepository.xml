@@ -7,9 +7,8 @@
 	<insert id="writeArticle">
 		INSERT INTO article
 		SET regDate = NOW(),
-		updateDate=
-		NOW(),
-		title =#{title},
+		updateDate = NOW(),
+		title = #{title},
 		`body`= #{body}
 	</insert>
 
@@ -22,7 +21,8 @@
 
 	<select id="getArticleByInputedId" resultType="Article">
 		SELECT *
-		FROM article
+		FROM
+		article
 		WHERE id
 		= #{id}
 	</select>
