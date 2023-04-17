@@ -21,4 +21,9 @@
 	<select id="getLastInsertId" resultType="int">
 		SELECT LAST_INSERT_ID()
 	</select>
+	<select id="isDuplicateId" resultType="int">
+		SELECT COUNT(*)
+		FROM `member`
+		WHERE loginId = #{loginId}
+	</select>
 </mapper>

@@ -15,8 +15,12 @@ public class UsrMemberController {
 
 	@RequestMapping("/usr/member/join")
 	@ResponseBody
-	public Member doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
+	public Object doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
+		boolean isDuplicateId = memberService.isDuplicateId(loginId);
+		if(!isDuplicateId) {
+			return "이미 사용중인 아이디입니다";
+		}
 		int id =  memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 		Member member = memberService.getMemberById(id);
 		return member;
