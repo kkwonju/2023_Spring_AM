@@ -13,6 +13,12 @@ public class MemberService {
 	
 	public int doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
+		Member existsMember = getMemberByLoginId(loginId);
+		
+		if (existsMember != null) {
+			return -1;
+		}
+		
 		memberRepository.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 		int id = memberRepository.getLastInsertId();
 		return id; 
@@ -22,7 +28,7 @@ public class MemberService {
 		return memberRepository.getMemberById(id); 
 	}
 
-	public boolean isDuplicateId(String loginId) {
-		return memberRepository.isDuplicateId(loginId) == 0;
+	public Member getMemberByLoginId(String loginId) {
+		return memberRepository.getMemberByLoginId(loginId);
 	}
 }

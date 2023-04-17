@@ -21,8 +21,8 @@
 	<select id="getLastInsertId" resultType="int">
 		SELECT LAST_INSERT_ID()
 	</select>
-	<select id="isDuplicateId" resultType="int">
-		SELECT COUNT(*)
+	<select id="getMemberByLoginId" resultType="Member">
+		SELECT *
 		FROM `member`
 		WHERE loginId = #{loginId}
 	</select>

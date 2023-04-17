@@ -13,5 +13,5 @@ public interface MemberRepository {
 	
 	int getLastInsertId();
 	
-	int isDuplicateId(String loginId);
+	Member getMemberByLoginId(String loginId);
 }
