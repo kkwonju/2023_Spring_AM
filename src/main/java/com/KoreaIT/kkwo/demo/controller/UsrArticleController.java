@@ -55,18 +55,26 @@ public class UsrArticleController {
 	}
 
 	// 액션 메서드
-	@RequestMapping("/usr/article/write")
+	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public Article doWrite(String title, String body) {
-		int id = articleService.writeArticle(title, body);
+	public ResultData doWrite(String title, String body) {
+		if(Ut.empty(title)) {
+			return ResultData.from("F-1", "제목을 입력해주세요");
+		}
+		if(Ut.empty(body)) {
+			return ResultData.from("F-1", "내용을 입력해주세요");
+		}
+		ResultData writeArticleRd = articleService.writeArticle(title, body);
+		int id = (int) writeArticleRd.getData1();
 		Article article = articleService.getArticleByInputedId(id);
-		return article;
+		return ResultData.from(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), article);
 	}
 
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
-	public List<Article> getArticles() {
-		return articleService.getArticles();
+	public ResultData getArticles() {
+		List<Article> articles =  articleService.getArticles();
+		return ResultData.from("S-1", Ut.f("게시글 목록"), articles); 
 	}
 
 	@RequestMapping("/usr/article/getArticle")
