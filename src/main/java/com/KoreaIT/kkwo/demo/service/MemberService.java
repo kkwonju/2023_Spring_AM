@@ -1,5 +1,7 @@
 package com.KoreaIT.kkwo.demo.service;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +15,18 @@ public class MemberService {
 	@Autowired
 	private MemberRepository memberRepository;
 
-	public ResultData doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
+	public ResultData<Integer> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
 		// 로그인 아이디 중복 체크
 		Member existsMember = getMemberByLoginId(loginId);
 
 		if (existsMember != null) {
-			return ResultData.from("F-8", Ut.f("이미 존재하는 아이디(%s)입니다", loginId), -1);
+			return ResultData.from("F-7", Ut.f("이미 존재하는 아이디(%s)입니다", loginId));
 		}
 		// 이름, 이메일 중복 체크
 		existsMember = getMemberByNameAndEmail(name, email);
 
 		if (existsMember != null) {
-			return ResultData.from("F-8", Ut.f("이미 존재하는 이름(%s)과 이메일(%s)입니다", name, email), -2);
+			return ResultData.from("F-8", Ut.f("이미 존재하는 이름(%s)과 이메일(%s)입니다", name, email));
 		}
 
 		memberRepository.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
@@ -43,4 +45,5 @@ public class MemberService {
 	private Member getMemberByNameAndEmail(String name, String email) {
 		return memberRepository.getMemberByNameAndEmail(name, email);
 	}
+	
 }

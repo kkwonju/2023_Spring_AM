@@ -2,6 +2,8 @@ package com.KoreaIT.kkwo.demo.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import com.KoreaIT.kkwo.demo.vo.ResultData;
 public class UsrArticleController {
 	@Autowired // 자동 연결
 	private ArticleService articleService;
+	@Autowired
+	private HttpSession httpSession;
 
 //	public UsrArticleController() {
 //	}
@@ -33,31 +37,34 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/delete")
 	@ResponseBody
-	public String doDelete(int id) {
-		Article article = articleService.getArticleByInputedId(id);
+	public ResultData<Integer> doDelete(int id) {
+		Article article = articleService.getArticleById(id);
 		if (article == null) {
-			return String.format("%d번 글은 존재하지 않습니다", id);
+			return ResultData.from("F-7" , Ut.f("%d번 글은 존재하지 않습니다", id), id);
 		}
 		articleService.deleteArticle(id);
-		return String.format("%d번 글이 삭제되었습니다", id);
+		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다", id), id);
 	}
 
 	@RequestMapping("/usr/article/modify")
 	@ResponseBody
-	public Object doModify(int id, String title, String body) {
-		Article article = articleService.getArticleByInputedId(id);
+	public ResultData<Article> doModify(int id, String title, String body) {
+		Article article = articleService.getArticleById(id);
 		if (article == null) {
-			return String.format("%d번 글은 존재하지 않습니다", id);
+			return ResultData.from("F-5", "%d번 글은 존재하지 않습니다");
+		}
+		if(Ut.empty(title) && Ut.empty(body)) {
+			return ResultData.from("F-6", "변경사항이 없습니다", article);
 		}
 		articleService.modifyArticle(id, title, body);
-		article = articleService.getArticleByInputedId(id);
-		return article;
+		article = articleService.getArticleById(id);
+		return ResultData.from("S-1", Ut.f("%d번 글이 수정되었습니다", id), article);
 	}
 
 	// 액션 메서드
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public ResultData doWrite(String title, String body) {
+	public ResultData<Article> doWrite(String title, String body) {
 		if(Ut.empty(title)) {
 			return ResultData.from("F-1", "제목을 입력해주세요");
 		}
@@ -66,13 +73,13 @@ public class UsrArticleController {
 		}
 		ResultData writeArticleRd = articleService.writeArticle(title, body);
 		int id = (int) writeArticleRd.getData1();
-		Article article = articleService.getArticleByInputedId(id);
-		return ResultData.from(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), article);
+		Article article = articleService.getArticleById(id);
+		return ResultData.newData(writeArticleRd, article);
 	}
 
 	@RequestMapping("/usr/article/list")
 	@ResponseBody
-	public ResultData getArticles() {
+	public ResultData<List<Article>> getArticles() {
 		List<Article> articles =  articleService.getArticles();
 		if(articles.isEmpty()) {
 			return ResultData.from("F-3", "게시글이 없습니다");
@@ -82,8 +89,8 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/getArticle")
 	@ResponseBody
-	public ResultData getArticle(int id) {
-		Article article = articleService.getArticleByInputedId(id);
+	public ResultData<Article> getArticle(int id) {
+		Article article = articleService.getArticleById(id);
 		if (article == null) {
 			return ResultData.from("F-4", Ut.f("%d번 글은 존재하지 않습니다", id));
 		}

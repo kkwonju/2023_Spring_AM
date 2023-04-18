@@ -32,4 +32,5 @@
 		WHERE `name` = #{name}
 		AND email = #{email}
 	</select>
+	<select id=""></select>
 </mapper>

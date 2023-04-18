@@ -1,5 +1,7 @@
 package com.KoreaIT.kkwo.demo.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +20,7 @@ public class UsrMemberController {
 
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public ResultData doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
+	public ResultData<Member> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
 
 		if (Ut.empty(loginId)) {
@@ -40,12 +42,54 @@ public class UsrMemberController {
 			return ResultData.from("F-6", Ut.f("이메일을 입력해주세요"));
 		}
 
-		ResultData joinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
+		ResultData<Integer> joinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 
 		if (joinRd.isFail()) {
-			return joinRd;
+			return (ResultData) joinRd;
 		}
-		Member member = memberService.getMemberById((int) joinRd.getData1());
+		Member member = memberService.getMemberById(joinRd.getData1());
 		return ResultData.newData(joinRd, member);
+	}
+
+	@RequestMapping("/usr/member/login")
+	@ResponseBody
+	public ResultData doLogin(HttpSession httpSession, String loginId, String loginPw) {
+		boolean isLogined = httpSession.getAttribute("loginedMemberId") != null;
+
+		if (isLogined) {
+			return ResultData.from("F9", "이미 로그인 중입니다");
+		}
+
+		if (Ut.empty(loginId)) {
+			return ResultData.from("F-10", "아이디를 입력해주세요");
+		}
+		if (Ut.empty(loginPw)) {
+			return ResultData.from("F-11", "비밀번호를 입력해주세요");
+		}
+
+		Member member = memberService.getMemberByLoginId(loginId);
+
+		if (member == null) {
+			return ResultData.from("F-12", "일치하는 회원이 없습니다");
+		}
+		if (!member.getLoginPw().equals(loginPw)) {
+			return ResultData.from("F-13", "비밀번호가 틀렸습니다");
+		}
+
+		httpSession.setAttribute("loginedMemberId", member.getId());
+		return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()));
+	}
+
+	@RequestMapping("/usr/member/logout")
+	@ResponseBody
+	public ResultData doLogout(HttpSession httpSession) {
+		boolean isLogined = httpSession.getAttribute("loginedMemberId") != null;
+		if(!isLogined) {
+			return ResultData.from("F-14", "로그아웃 상태입니다");
+		}
+		httpSession.removeAttribute("loginedMemberId");
+		return ResultData.from("S-1", "로그아웃되었습니다");
+		
+		
 	}
 }
