@@ -7,8 +7,8 @@
 	<insert id="writeArticle">
 		INSERT INTO article
 		SET regDate = NOW(),
-		updateDate =
-		NOW(),
+		updateDate = NOW(),
+		memberId = #{memberId},
 		title = #{title},
 		`body`= #{body}
 	</insert>
@@ -16,21 +16,17 @@
 	<select id="getArticles" resultType="Article">
 		SELECT *
 		FROM article
-		ORDER BY
-		id DESC
+		ORDER BY id DESC
 	</select>
 
-	<select id="getArticleByInputedId" resultType="Article">
+	<select id="getArticleById" resultType="Article">
 		SELECT *
-		FROM
-		article
-		WHERE id
-		= #{id}
+		FROM article
+		WHERE id = #{id}
 	</select>
 
 	<delete id="deleteArticle">
-		DELETE FROM
-		article
+		DELETE FROM	article
 		WHERE id = #{id}
 	</delete>
 
@@ -52,4 +48,7 @@
 		SELECT LAST_INSERT_ID()
 	</select>
 
+	<select id="">
+
+	</select>
 </mapper>
