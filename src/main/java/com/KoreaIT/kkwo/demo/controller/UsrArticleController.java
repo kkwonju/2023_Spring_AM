@@ -74,7 +74,10 @@ public class UsrArticleController {
 	@ResponseBody
 	public ResultData getArticles() {
 		List<Article> articles =  articleService.getArticles();
-		return ResultData.from("S-1", Ut.f("게시글 목록"), articles); 
+		if(articles.isEmpty()) {
+			return ResultData.from("F-1", "게시글이 없습니다");
+		}
+		return ResultData.from("S-1", "Article List", articles); 
 	}
 
 	@RequestMapping("/usr/article/getArticle")
