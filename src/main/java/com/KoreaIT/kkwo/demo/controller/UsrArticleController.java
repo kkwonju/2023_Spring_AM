@@ -62,7 +62,7 @@ public class UsrArticleController {
 			return ResultData.from("F-1", "제목을 입력해주세요");
 		}
 		if(Ut.empty(body)) {
-			return ResultData.from("F-1", "내용을 입력해주세요");
+			return ResultData.from("F-2", "내용을 입력해주세요");
 		}
 		ResultData writeArticleRd = articleService.writeArticle(title, body);
 		int id = (int) writeArticleRd.getData1();
@@ -75,7 +75,7 @@ public class UsrArticleController {
 	public ResultData getArticles() {
 		List<Article> articles =  articleService.getArticles();
 		if(articles.isEmpty()) {
-			return ResultData.from("F-1", "게시글이 없습니다");
+			return ResultData.from("F-3", "게시글이 없습니다");
 		}
 		return ResultData.from("S-1", "Article List", articles); 
 	}
@@ -85,7 +85,7 @@ public class UsrArticleController {
 	public ResultData getArticle(int id) {
 		Article article = articleService.getArticleByInputedId(id);
 		if (article == null) {
-			return ResultData.from("F-1", Ut.f("%d번 글은 존재하지 않습니다", id));
+			return ResultData.from("F-4", Ut.f("%d번 글은 존재하지 않습니다", id));
 		}
 		return ResultData.from("S-1", Ut.f("%d번 글입니다", id), article);
 	}
