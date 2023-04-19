@@ -20,7 +20,7 @@ public class UsrMemberController {
 
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public ResultData<Member> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
+	public ResultData<Member> doJoin(HttpSession httpSession, String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
 
 		if (Ut.empty(loginId)) {
@@ -63,6 +63,7 @@ public class UsrMemberController {
 		if (Ut.empty(loginId)) {
 			return ResultData.from("F-10", "아이디를 입력해주세요");
 		}
+		
 		if (Ut.empty(loginPw)) {
 			return ResultData.from("F-11", "비밀번호를 입력해주세요");
 		}
@@ -72,6 +73,7 @@ public class UsrMemberController {
 		if (member == null) {
 			return ResultData.from("F-12", "일치하는 회원이 없습니다");
 		}
+		
 		if (!member.getLoginPw().equals(loginPw)) {
 			return ResultData.from("F-13", "비밀번호가 틀렸습니다");
 		}

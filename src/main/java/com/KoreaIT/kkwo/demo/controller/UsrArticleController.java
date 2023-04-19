@@ -14,6 +14,8 @@ import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.Article;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 
+import ch.qos.logback.core.joran.conditional.IfAction;
+
 @Controller
 public class UsrArticleController {
 	@Autowired // 자동 연결
@@ -23,7 +25,12 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
 	public ResultData<Article> doWrite(HttpSession httpSession, String title, String body) {
-		boolean isLogined = httpSession.getAttribute("loginedMemberId") != null;
+		boolean isLogined = false;
+		
+		if(httpSession.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+		}		
+		
 		if(!isLogined) {
 			return ResultData.from("F-0", "로그인 후 이용해주세요");
 		}
@@ -62,25 +69,65 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/delete")
 	@ResponseBody
-	public ResultData<Integer> doDelete(int id) {
+	public ResultData<Integer> doDelete(HttpSession httpSession, int id) {
+		
+		boolean isLogined = false;
+		int loginedMemberId = 0;
+		
+		if(httpSession.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
+		}		
+		
+		if(!isLogined) {
+			return ResultData.from("F-0", "로그인 후 이용해주세요");
+		}
+		
 		Article article = articleService.getArticleById(id);
+		
 		if (article == null) {
 			return ResultData.from("F-7", Ut.f("%d번 글은 존재하지 않습니다", id), id);
 		}
+		
+		if(article.getMemberId() != loginedMemberId) {
+			return ResultData.from("F-0", "삭제 권한이 없습니다");
+		}
+		
 		articleService.deleteArticle(id);
 		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다", id), id);
 	}
 
 	@RequestMapping("/usr/article/modify")
 	@ResponseBody
-	public ResultData<Article> doModify(int id, String title, String body) {
-		Article article = articleService.getArticleById(id);
-		if (article == null) {
-			return ResultData.from("F-5", "%d번 글은 존재하지 않습니다");
+	public ResultData<Article> doModify(HttpSession httpSession, int id, String title, String body) {
+		
+		boolean isLogined = false;
+		int loginedMemberId = 0;
+		
+		if(httpSession.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
 		}
+		
+		if(!isLogined) {
+			return ResultData.from("F-0", "로그인 후 이용해주세요");
+		}
+		
+		Article article = articleService.getArticleById(id);
+		
+		if (article == null) {
+			return ResultData.from("F-5", Ut.f("%d번 글은 존재하지 않습니다", id));
+		}
+		
+		if(article.getMemberId() != loginedMemberId) {
+			return ResultData.from("F-0", "수정 권한이 없습니다");
+		}
+		
+		
 		if (Ut.empty(title) && Ut.empty(body)) {
 			return ResultData.from("F-6", "변경사항이 없습니다", article);
 		}
+		
 		articleService.modifyArticle(id, title, body);
 		article = articleService.getArticleById(id);
 		return ResultData.from("S-1", Ut.f("%d번 글이 수정되었습니다", id), article);
