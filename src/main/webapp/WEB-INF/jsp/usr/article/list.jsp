@@ -11,8 +11,25 @@
 	<h1>List</h1>
 
 	<hr />
-	<c:forEach var="article" items="${articles }">
-	${article.id }
-	</c:forEach>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>번호</th>
+				<th>날짜</th>
+				<th>제목</th>
+				<th>작성자</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach var="article" items="${articles }">
+				<tr>
+					<td>${article.id }</td>
+					<td>${article.regDate.subString(0,10) }</td>
+					<td><a href="detail?id=${article.id }">%{article.title}</a></td>
+					<td>${article.memberId }</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
 </body>
 </html>
