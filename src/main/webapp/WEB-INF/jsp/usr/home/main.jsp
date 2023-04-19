@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>메인페이지</title>
+<link rel="stylesheet" href="/resource/common.css" />
+<script src="/resouce./common.js" defer="defer"></script>
 </head>
 <body>
 	<h1>Main Page</h1>
@@ -25,6 +27,5 @@
 		Error consequatur quidem ullam voluptates ad eveniet aspernatur
 		assumenda id nostrum minima quos quaerat reiciendis. Commodi veritatis
 		praesentium. Ex corporis natus. Dolorum!</div>
-
 </body>
 </html>

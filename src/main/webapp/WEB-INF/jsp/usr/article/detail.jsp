@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Detail</title>
+<link rel="stylesheet" href="/resource/common.css" />
 </head>
 <body>
 	<h1>NO.${article.id } Article</h1>
