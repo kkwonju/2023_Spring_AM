@@ -1,14 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Detail</title>
-<link rel="stylesheet" href="/resource/common.css" />
-</head>
-<body>
+<c:set var="pageTitle" value="ARTICLE DETAIL"/>
+<%@ include file="../common/head.jspf" %>
 	<h1>NO.${article.id } Article</h1>
 
 	<hr />
@@ -19,6 +13,4 @@
 	<div>제목 : ${article.title }</div>
 	<hr />
 	<div>${article.body }</div>
-	
-</body>
-</html>
+<%@ include file="../common/foot.jspf" %>
