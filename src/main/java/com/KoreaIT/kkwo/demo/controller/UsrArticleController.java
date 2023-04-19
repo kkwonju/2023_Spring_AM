@@ -51,26 +51,21 @@ public class UsrArticleController {
 		return ResultData.newData(writeArticleRd, "Article", article);
 	}
 
-	@RequestMapping("/usr/article/article")
-	@ResponseBody
-	public ResultData<Article> getArticle(int id) {
+	@RequestMapping("/usr/article/detail")
+	public String showArticle(Model model, int id) {
 		Article article = articleService.getArticleById(id);
-		if (article == null) {
-			return ResultData.from("F-4", Ut.f("%d번 글은 존재하지 않습니다", id));
-		}
-		return ResultData.from("S-1", Ut.f("%d번 글입니다", id), "Article",article);
+//		if (article == null) {
+//			return ResultData.from("F-4", Ut.f("%d번 글은 존재하지 않습니다", id));
+//		}
+		model.addAttribute("article", article);
+		return "usr/article/detail";
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String getArticles(Model model) {
+	public String showList(Model model) {
 		List<Article> articles = articleService.getArticles();
-//		if (articles.isEmpty()) {
-//			return ResultData.from("F-3", "게시글이 없습니다");
-//		}
-		
 		model.addAttribute("articles", articles);
 		return "usr/article/list";
-//		return ResultData.from("S-1", "Article List", "List<Article>", articles);
 	}
 
 	@RequestMapping("/usr/article/modify")

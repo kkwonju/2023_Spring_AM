@@ -9,6 +9,17 @@
 </head>
 <body>
 	<h1>List</h1>
+	<header>
+		<a href="/">로고</a>
+		<ul>
+			<li>
+				<a href="/">HOME</a>
+			</li>
+			<li>
+				<a href="../article/list">LIST</a>
+			</li>
+		</ul>
+	</header>
 
 	<hr />
 	<table border="1">
@@ -24,8 +35,8 @@
 			<c:forEach var="article" items="${articles }">
 				<tr>
 					<td>${article.id }</td>
-					<td>${article.regDate.subString(0,10) }</td>
-					<td><a href="detail?id=${article.id }">%{article.title}</a></td>
+					<td>${article.regDate.substring(0,10) }</td>
+					<td><a href="detail?id=${article.id }">${article.title}</a></td>
 					<td>${article.memberId }</td>
 				</tr>
 			</c:forEach>
