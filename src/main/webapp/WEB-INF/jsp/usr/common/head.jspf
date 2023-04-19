@@ -6,20 +6,39 @@
 <head>
 <meta charset="UTF-8">
 <title>${pageTitle }</title>
+<!-- 테일윈드 불러오기 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" />
+
+<!-- 폰트어썸 불러오기 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+
+<!-- 제이쿼리 불러오기 -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- 공통 CSS , JS 불러오기 -->
 <link rel="stylesheet" href="/resource/common.css" />
 <script src="/resouce./common.js" defer="defer"></script>
 </head>
 <body>
-	<h1>${pageTitle }</h1>
 	<header>
-		<a href="/">로고</a>
-		<ul>
-			<li>
-				<a href="/">HOME</a>
-			</li>
-			<li>
-				<a href="../article/list">LIST</a>
-			</li>
-		</ul>
+		<div class="h-20 flex mx-auto text-3xl">
+			<a href="/">로고</a>
+			<div class="flex-grow"></div>
+			<%-- 		<h1>${pageTitle }</h1> --%>
+			<ul class="flex">
+				<li>
+					<a href="/">HOME</a>
+				</li>
+				<li>
+					<a href="../article/list">LIST</a>
+				</li>
+				<li>
+					<a href="../member/login">LOGIN</a>
+				</li>
+			</ul>
+		</div>
 	</header>
 	<main>
