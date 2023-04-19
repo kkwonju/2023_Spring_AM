@@ -1,7 +1,5 @@
 package com.KoreaIT.kkwo.demo.vo;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Member {
 	private int id;
-	private LocalDateTime regDate;
-	private LocalDateTime updateDate;
+	private String regDate;
+	private String updateDate;
 	private String loginId;
 	private String loginPw;
 	private int authLevel;
@@ -21,5 +19,5 @@ public class Member {
 	private String cellphoneNum;
 	private String email;
 	private int delStatus;
-	private LocalDateTime delDateTime;
+	private String delDateTime;
 }

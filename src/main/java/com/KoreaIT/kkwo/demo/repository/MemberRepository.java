@@ -7,14 +7,14 @@ import com.KoreaIT.kkwo.demo.vo.Member;
 @Mapper
 public interface MemberRepository {
 
-	void doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email);
+	public void doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email);
 
-	Member getMemberById(int id);
+	public Member getMemberById(int id);
 	
-	int getLastInsertId();
+	public int getLastInsertId();
 	
-	Member getMemberByLoginId(String loginId);
+	public Member getMemberByLoginId(String loginId);
 
-	Member getMemberByNameAndEmail(String name, String email);
+	public Member getMemberByNameAndEmail(String name, String email);
 
 }

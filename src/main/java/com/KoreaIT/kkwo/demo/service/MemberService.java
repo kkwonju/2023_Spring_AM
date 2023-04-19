@@ -1,7 +1,5 @@
 package com.KoreaIT.kkwo.demo.service;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +29,7 @@ public class MemberService {
 
 		memberRepository.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 		int id = memberRepository.getLastInsertId();
-		return ResultData.from("S-1", Ut.f("%d번 회원 가입", id), id);
+		return ResultData.from("S-1", Ut.f("%d번 회원 가입", id), "id", id);
 	}
 
 	public Member getMemberById(int id) {

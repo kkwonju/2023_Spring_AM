@@ -13,24 +13,27 @@
 		cellphoneNum = #{cellphoneNum},
 		email = #{email}
 	</insert>
+	
 	<select id="getMemberById" resultType="Member">
 		SELECT *
 		FROM `member`
 		WHERE id = #{id}
 	</select>
+	
 	<select id="getLastInsertId" resultType="int">
 		SELECT LAST_INSERT_ID()
 	</select>
+	
 	<select id="getMemberByLoginId" resultType="Member">
 		SELECT *
 		FROM `member`
 		WHERE loginId = #{loginId}
 	</select>
+	
 	<select id="getMemberByNameAndEmail" resultType="Member">
 		SELECT *
 		FROM `member`
 		WHERE `name` = #{name}
 		AND email = #{email}
 	</select>
-	<select id=""></select>
 </mapper>

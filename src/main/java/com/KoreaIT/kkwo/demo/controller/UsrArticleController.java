@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,7 +23,7 @@ public class UsrArticleController {
 	private ArticleService articleService;
 
 	// 액션 메서드
-	@RequestMapping("/usr/article/doWrite")
+	@RequestMapping("/usr/article/write")
 	@ResponseBody
 	public ResultData<Article> doWrite(HttpSession httpSession, String title, String body) {
 		boolean isLogined = false;
@@ -40,31 +41,36 @@ public class UsrArticleController {
 		if (Ut.empty(body)) {
 			return ResultData.from("F-2", "내용을 입력해주세요");
 		}
+		
 		int memberId = (int) httpSession.getAttribute("loginedMemberId");
+		
 		ResultData writeArticleRd = articleService.writeArticle(title, body, memberId);
 		int id = (int) writeArticleRd.getData1();
+		
 		Article article = articleService.getArticleById(id);
-		return ResultData.newData(writeArticleRd, article);
+		return ResultData.newData(writeArticleRd, "Article", article);
 	}
 
-	@RequestMapping("/usr/article/getArticle")
+	@RequestMapping("/usr/article/article")
 	@ResponseBody
 	public ResultData<Article> getArticle(int id) {
 		Article article = articleService.getArticleById(id);
 		if (article == null) {
 			return ResultData.from("F-4", Ut.f("%d번 글은 존재하지 않습니다", id));
 		}
-		return ResultData.from("S-1", Ut.f("%d번 글입니다", id), article);
+		return ResultData.from("S-1", Ut.f("%d번 글입니다", id), "Article",article);
 	}
 
 	@RequestMapping("/usr/article/list")
-	@ResponseBody
-	public ResultData<List<Article>> getArticles() {
+	public String getArticles(Model model) {
 		List<Article> articles = articleService.getArticles();
-		if (articles.isEmpty()) {
-			return ResultData.from("F-3", "게시글이 없습니다");
-		}
-		return ResultData.from("S-1", "Article List", articles);
+//		if (articles.isEmpty()) {
+//			return ResultData.from("F-3", "게시글이 없습니다");
+//		}
+		
+		model.addAttribute("articles", articles);
+		return "usr/article/list";
+//		return ResultData.from("S-1", "Article List", "List<Article>", articles);
 	}
 
 	@RequestMapping("/usr/article/modify")
@@ -96,7 +102,7 @@ public class UsrArticleController {
 		}
 		
 		if (Ut.empty(title) && Ut.empty(body)) {
-			return ResultData.from("F-6", "변경사항이 없습니다", article);
+			return ResultData.from("F-6", "변경사항이 없습니다", "Article", article);
 		}
 
 		return articleService.modifyArticle(id, title, body);
@@ -121,7 +127,7 @@ public class UsrArticleController {
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return ResultData.from("F-7", Ut.f("%d번 글은 존재하지 않습니다", id), id);
+			return ResultData.from("F-7", Ut.f("%d번 글은 존재하지 않습니다", id), "id", id);
 		}
 
 		if (article.getMemberId() != loginedMemberId) {
@@ -129,7 +135,6 @@ public class UsrArticleController {
 		}
 
 		articleService.deleteArticle(id);
-		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다", id), id);
+		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다", id), "id", id);
 	}
-
 }

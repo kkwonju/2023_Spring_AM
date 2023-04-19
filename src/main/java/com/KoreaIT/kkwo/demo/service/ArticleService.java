@@ -22,7 +22,7 @@ public class ArticleService {
 	public ResultData<Integer> writeArticle(String title, String body, int memberId) {
 		articleRepository.writeArticle(title, body, memberId);
 		int id = articleRepository.getLastInsertId();
-		return ResultData.from("S-1", Ut.f("%d번 글 생성", id), id);
+		return ResultData.from("S-1", Ut.f("%d번 글 생성", id), "id", id);
 	}
 
 	public List<Article> getArticles() {
@@ -40,7 +40,7 @@ public class ArticleService {
 	public ResultData<Article> modifyArticle(int id, String title, String body) {
 		articleRepository.modifyArticle(id, title, body);
 		Article article = getArticleById(id);
-		return ResultData.from("S-1", Ut.f("%d번 글이 수정되었습니다", id), article);
+		return ResultData.from("S-1", Ut.f("%d번 글이 수정되었습니다", id), "Article", article);
 	}
 
 	public ResultData actorCanModify(int loginedMemberId, Article article) {

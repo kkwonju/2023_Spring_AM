@@ -18,7 +18,7 @@ public class UsrMemberController {
 	@Autowired
 	private MemberService memberService;
 
-	@RequestMapping("/usr/member/doJoin")
+	@RequestMapping("/usr/member/join")
 	@ResponseBody
 	public ResultData<Member> doJoin(HttpSession httpSession, String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
@@ -48,7 +48,7 @@ public class UsrMemberController {
 			return (ResultData) joinRd;
 		}
 		Member member = memberService.getMemberById(joinRd.getData1());
-		return ResultData.newData(joinRd, member);
+		return ResultData.newData(joinRd, "Member", member);
 	}
 
 	@RequestMapping("/usr/member/login")
