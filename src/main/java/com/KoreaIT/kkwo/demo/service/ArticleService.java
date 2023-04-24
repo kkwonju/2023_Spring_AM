@@ -74,8 +74,8 @@ public class ArticleService {
 	}
 	
 	/* 출력용 게시글 목록 가져오기 */
-	public List<Article> getForPrintArticles() {
-		return articleRepository.getForPrintArticles();
+	public List<Article> getForPrintArticles(int boardId) {
+		return articleRepository.getForPrintArticles(boardId);
 	}
 
 	/* 게시글 수정 */

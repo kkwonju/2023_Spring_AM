@@ -37,16 +37,22 @@ public class Rq {
 		this.loginedMemberId = loginedMemberId;
 	}
 
+	public String jsHistoryBackOnView(String msg) {
+		req.setAttribute("msg", msg);
+		req.setAttribute("historyBack", true);
+		return "usr/common/js";
+	}
+
 	public void printHistoryBackJs(String msg) throws IOException {
 		resp.setContentType("text/html; charset=UTF-8;");
 		print(Ut.jsHistoryBack("F-B", msg));
 	}
-	
+
 	public void printReplaceJs(String msg, String uri) throws IOException {
 		resp.setContentType("text/html; charset=UTF-8;");
 		print(Ut.jsReplace("F-B", msg, uri));
 	}
-	
+
 	public void print(String str) {
 		try {
 			resp.getWriter().append(str);
@@ -66,4 +72,5 @@ public class Rq {
 	public void logout() {
 		session.removeAttribute("loginedMemberId");
 	}
+
 }

@@ -48,6 +48,23 @@
 					<a class="h-full px-3 flex items-center" href="/usr/article/list">
 						<span>LIST</span>
 					</a>
+					<ul>
+						<li class="hover:underline">
+							<a href="/usr/article/list?boardId=1">
+								<span>Notice</span>
+							</a>
+						</li>
+						<li class="hover:underline">
+							<a href="/usr/article/list?boardId=2">
+								<span>Free</span>
+							</a>
+						</li>
+						<li class="hover:underline">
+							<a href="/usr/article/list?boardId=3">
+								<span>QnA</span>
+							</a>
+						</li>
+					</ul>
 				</li>
 				<li class="hover:underline">
 					<a class="h-full px-3 flex items-center" href="/usr/article/write">

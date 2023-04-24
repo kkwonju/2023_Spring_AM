@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.KoreaIT.kkwo.demo.service.ArticleService;
+import com.KoreaIT.kkwo.demo.service.BoardService;
 import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.Article;
+import com.KoreaIT.kkwo.demo.vo.Board;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 import com.KoreaIT.kkwo.demo.vo.Rq;
 
@@ -20,6 +22,8 @@ import com.KoreaIT.kkwo.demo.vo.Rq;
 public class UsrArticleController {
 	@Autowired
 	private ArticleService articleService;
+	@Autowired
+	private BoardService boardService;
 
 	@RequestMapping("/usr/article/write")
 	public String showWrite() {
@@ -43,8 +47,8 @@ public class UsrArticleController {
 		ResultData writeRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
 
 		int id = (int) writeRd.getData1();
-
-		Article article = articleService.getArticle(id);
+		
+		
 
 		return Ut.jsReplace("S-1", Ut.f("%d번 글이 생성되었습니다", id), "../article/list");
 	}
@@ -60,8 +64,17 @@ public class UsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model) {
-		List<Article> articles = articleService.getForPrintArticles();
+	public String showList(HttpServletRequest req, Model model, int boardId) {
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		Board board = boardService.getBoardById(boardId);
+		if(board == null) {
+			return rq.jsHistoryBackOnView("없는 게시판");
+		}
+		
+		List<Article> articles = articleService.getForPrintArticles(boardId);
+		
+		model.addAttribute("board", board);
 		model.addAttribute("articles", articles);
 		return "usr/article/list";
 	}

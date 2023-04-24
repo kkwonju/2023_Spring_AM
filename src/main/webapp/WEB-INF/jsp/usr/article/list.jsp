@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<c:set var="pageTitle" value="Article List" />
+<c:set var="pageTitle" value="${board.code }" />
 <%@ include file="../common/head.jspf"%>
 
 <section class="mt-8 text-xl">
@@ -24,12 +24,14 @@
 				</thead>
 				<tbody>
 					<c:forEach var="article" items="${articles}">
-						<tr>
-							<td>${article.id }</td>
-							<td>${article.regDate.substring(2, 16) }</td>
-							<td><a class="hover:underline" href="detail?id=${article.id }">${article.title }</a></td>
-							<td>${article.extra__writer }</td>
-						</tr>
+							<tr>
+								<td>${article.id }</td>
+								<td>${article.regDate.substring(2, 16) }</td>
+								<td>
+									<a class="hover:underline" href="detail?id=${article.id }">${article.title }</a>
+								</td>
+								<td>${article.extra__writer }</td>
+							</tr>
 					</c:forEach>
 				</tbody>
 			</table>
