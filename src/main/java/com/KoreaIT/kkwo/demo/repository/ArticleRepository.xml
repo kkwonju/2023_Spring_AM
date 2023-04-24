@@ -1,54 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper
-	namespace="com.KoreaIT.kkwo.demo.repository.ArticleRepository">
+
+<mapper namespace="com.KoreaIT.kkwo.demo.repository.ArticleRepository">
 
 	<insert id="writeArticle">
 		INSERT INTO article
 		SET regDate = NOW(),
 		updateDate = NOW(),
-		memberId = #{memberId},
 		title = #{title},
-		`body`= #{body}
+		`body` = #{body},
+		memberId = #{memberId}
 	</insert>
-
-	<select id="getArticles" resultType="Article">
-		SELECT *
-		FROM article
-		ORDER BY id DESC
-	</select>
-
-	<select id="getArticleById" resultType="Article">
-		SELECT *
-		FROM article
-		WHERE id = #{id}
-	</select>
-
-	<delete id="deleteArticle">
-		DELETE FROM	article
-		WHERE id = #{id}
-	</delete>
-
+	<!-- resultType="com.kkwo.demo.vo.Article" 써줘야하지만 application.yml에 써있으면 
+		생략가능 mybatis: type-aliases-package: com.kkwo.demo.vo -->
 	<update id="modifyArticle">
 		UPDATE article
 		<set>
-			<if test="title != null and title !=''">
+			<if test="title != null and title != ''">
 				title = #{title},
 			</if>
 			<if test="body != null and body != ''">
-				`body` = #{body},
+				body = #{body},
 			</if>
-			updateDate= NOW()
+			updateDate = NOW()
 		</set>
 		WHERE id = #{id}
 	</update>
-
+	<delete id="deleteArticle">
+		DELETE
+		FROM article
+		WHERE id = #{id}
+	</delete>
 	<select id="getLastInsertId" resultType="int">
 		SELECT LAST_INSERT_ID()
-	</select>
-
-	<select id="">
-
 	</select>
 </mapper>

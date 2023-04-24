@@ -14,34 +14,33 @@ public class MemberService {
 	private MemberRepository memberRepository;
 
 	public ResultData<Integer> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
-		// 로그인 아이디 중복 체크
-		Member existsMember = getMemberByLoginId(loginId);
-
-		if (existsMember != null) {
-			return ResultData.from("F-7", Ut.f("이미 존재하는 아이디(%s)입니다", loginId));
+		Member existsMember = memberRepository.getMemberByLoginId(loginId);
+		if(existsMember != null) {
+			return ResultData.from("F-7", Ut.f("이미 가입된 아이디입니다 [%s]", loginId));
 		}
-		// 이름, 이메일 중복 체크
+		
 		existsMember = getMemberByNameAndEmail(name, email);
-
-		if (existsMember != null) {
-			return ResultData.from("F-8", Ut.f("이미 존재하는 이름(%s)과 이메일(%s)입니다", name, email));
+		
+		if(existsMember != null) {
+			return ResultData.from("F-8", Ut.f("이미 가입된 이름과 이메일입니다 [%s, %s])", name, email));
 		}
-
+		
 		memberRepository.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 		int id = memberRepository.getLastInsertId();
-		return ResultData.from("S-1", Ut.f("%d번 회원 가입", id), "id", id);
+		
+		return ResultData.from("S-1", "가입되었습니다", "id", id);
 	}
 
 	public Member getMemberById(int id) {
 		return memberRepository.getMemberById(id);
 	}
-
+	
 	public Member getMemberByLoginId(String loginId) {
 		return memberRepository.getMemberByLoginId(loginId);
 	}
 	
-	private Member getMemberByNameAndEmail(String name, String email) {
+	public Member getMemberByNameAndEmail(String name, String email) {
 		return memberRepository.getMemberByNameAndEmail(name, email);
 	}
-	
+
 }

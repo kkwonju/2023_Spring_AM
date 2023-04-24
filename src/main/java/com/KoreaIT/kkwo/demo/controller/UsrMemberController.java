@@ -1,5 +1,6 @@
 package com.KoreaIT.kkwo.demo.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import com.KoreaIT.kkwo.demo.service.MemberService;
 import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.Member;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
-import com.fasterxml.jackson.core.io.UTF32Reader;
+import com.KoreaIT.kkwo.demo.vo.Rq;
 
 @Controller
 public class UsrMemberController {
@@ -20,26 +21,32 @@ public class UsrMemberController {
 
 	@RequestMapping("/usr/member/join")
 	@ResponseBody
-	public ResultData<Member> doJoin(HttpSession httpSession, String loginId, String loginPw, String name, String nickname, String cellphoneNum,
-			String email) {
+	public ResultData<Member> doJoin(HttpServletRequest req, String loginId, String loginPw, String name,
+			String nickname, String cellphoneNum, String email) {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+
+		if (rq.isLogined()) {
+			return ResultData.from("F-0", "로그아웃 후 이용해주세요");
+		}
 
 		if (Ut.empty(loginId)) {
-			return ResultData.from("F-1", Ut.f("아이디를 입력해주세요"));
+			return ResultData.from("F-1", "아이디를 입력해주세요");
 		}
 		if (Ut.empty(loginPw)) {
-			return ResultData.from("F-2", Ut.f("비밀번호를 입력해주세요"));
+			return ResultData.from("F-2", "비밀번호를 입력해주세요");
 		}
 		if (Ut.empty(name)) {
-			return ResultData.from("F-3", Ut.f("이름을 입력해주세요"));
+			return ResultData.from("F-3", "이름을 입력해주세요");
 		}
 		if (Ut.empty(nickname)) {
-			return ResultData.from("F-4", Ut.f("닉네임을 입력해주세요"));
+			return ResultData.from("F-4", "닉네임을 입력해주세요");
 		}
 		if (Ut.empty(cellphoneNum)) {
-			return ResultData.from("F-5", Ut.f("전화번호를 입력해주세요"));
+			return ResultData.from("F-5", "전화번호를 입력해주세요");
 		}
 		if (Ut.empty(email)) {
-			return ResultData.from("F-6", Ut.f("이메일을 입력해주세요"));
+			return ResultData.from("F-6", "이메일을 입력해주세요");
 		}
 
 		ResultData<Integer> joinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
@@ -47,51 +54,63 @@ public class UsrMemberController {
 		if (joinRd.isFail()) {
 			return (ResultData) joinRd;
 		}
+
 		Member member = memberService.getMemberById(joinRd.getData1());
+
 		return ResultData.newData(joinRd, "Member", member);
 	}
 
 	@RequestMapping("/usr/member/login")
+	public String showLoginForm() {
+		return "usr/member/login";
+	}
+	
+	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
-	public ResultData doLogin(HttpSession httpSession, String loginId, String loginPw) {
-		boolean isLogined = httpSession.getAttribute("loginedMemberId") != null;
+	public ResultData doLogin(HttpServletRequest req, HttpSession httpSession, String loginId, String loginPw) {
 
-		if (isLogined) {
-			return ResultData.from("F9", "이미 로그인 중입니다");
+		Rq rq = (Rq) req.getAttribute("rq");
+
+		if (rq.isLogined()) {
+			return ResultData.from("F-0", "이미 로그인 상태입니다");
 		}
 
 		if (Ut.empty(loginId)) {
-			return ResultData.from("F-10", "아이디를 입력해주세요");
+			return ResultData.from("F-1", "아이디를 입력해주세요");
 		}
-		
+
 		if (Ut.empty(loginPw)) {
-			return ResultData.from("F-11", "비밀번호를 입력해주세요");
-		}
-
-		Member member = memberService.getMemberByLoginId(loginId);
-
-		if (member == null) {
-			return ResultData.from("F-12", "일치하는 회원이 없습니다");
+			return ResultData.from("F-2", "비밀번호를 입력해주세요");
 		}
 		
-		if (!member.getLoginPw().equals(loginPw)) {
-			return ResultData.from("F-13", "비밀번호가 틀렸습니다");
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if(member == null) {
+			return ResultData.from("F-3", Ut.f("%s는 존재하지 않는 아이디입니다", loginId));
 		}
-
+		
+		if(!member.getLoginPw().equals(loginPw)) {
+			return ResultData.from("F-4", "비밀번호가 일치하지 않습니다");
+		}
+		
 		httpSession.setAttribute("loginedMemberId", member.getId());
+		
 		return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()));
 	}
-
+	
 	@RequestMapping("/usr/member/logout")
 	@ResponseBody
-	public ResultData doLogout(HttpSession httpSession) {
-		boolean isLogined = httpSession.getAttribute("loginedMemberId") != null;
-		if(!isLogined) {
-			return ResultData.from("F-14", "로그아웃 상태입니다");
+	public ResultData doLogout(HttpSession httpSession, HttpServletRequest req) {
+		
+		Rq rq = (Rq) req.getAttribute("rq");
+
+		if (!rq.isLogined()) {
+			return ResultData.from("F-0", "이미 로그아웃 상태입니다");
 		}
+		
 		httpSession.removeAttribute("loginedMemberId");
-		return ResultData.from("S-1", "로그아웃되었습니다");
 		
-		
+		return ResultData.from("S-1", "로그아웃 되었습니다");
 	}
+
 }
