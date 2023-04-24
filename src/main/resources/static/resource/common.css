@@ -35,19 +35,19 @@
 	font-family: 'LotteMartDream', sans-serif;
 }
 
-html > body {
+html>body {
 	font-family: 'LotteMartDream', sans-serif;
 }
 
 /* 라이브러리 */
-.table-box-type-1 th,.table-box-type-1 tbody td {
+.table-box-type-1 th, .table-box-type-1 tbody td {
 	border: 1px solid black;
 	padding: 10px;
 	text-align: center;
 }
 
 .btn-text-link {
-	color: #1f1f1f;
+	color: black;
 }
 
 .btn-text-link:hover {
