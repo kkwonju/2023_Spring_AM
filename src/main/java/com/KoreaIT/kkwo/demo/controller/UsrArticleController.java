@@ -102,6 +102,6 @@ public class UsrArticleController {
 
 		articleService.deleteArticle(id);
 
-		return Ut.jsReplace(Ut.f("%d번 글을 삭제했습니다", id), "../article/list");
+		return Ut.jsReplace("S-1", Ut.f("%d번 글을 삭제했습니다", id), "../article/list");
 	}
 }

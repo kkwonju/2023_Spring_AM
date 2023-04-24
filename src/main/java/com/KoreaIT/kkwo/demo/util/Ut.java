@@ -35,7 +35,7 @@ public class Ut {
 	}
 
 	/* 접근 시 특정 페이지로 ,  */
-	public static String jsReplace(String resultMsg, String uri) {
+	public static String jsReplace(String resultCode, String resultMsg, String uri) {
 		if(resultMsg == null) {
 			resultMsg = "";
 		}
