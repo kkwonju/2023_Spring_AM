@@ -24,7 +24,7 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/write")
 	@ResponseBody
 	public ResultData<Article> writeArticle(HttpServletRequest req, String title, String body) {
-		
+
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (Ut.empty(title)) {
@@ -46,9 +46,9 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(HttpServletRequest req, Model model, int id) {
-		
+
 		Rq rq = (Rq) req.getAttribute("rq");
-		
+
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 		model.addAttribute(article);
 		return "usr/article/detail";
@@ -61,33 +61,57 @@ public class UsrArticleController {
 		return "usr/article/list";
 	}
 
-	/* 게시글 수정 */
+	/* 게시글 수정 페이지 */
 	@RequestMapping("/usr/article/modify")
+	public String showModify(HttpServletRequest req, Model model, int id) {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+
+		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+
+		if (article == null) {
+			return Ut.jsHistoryBackOnView(req, Ut.f("%d번 글은 존재하지 않습니다", id));
+		}
+
+		ResultData actorCanModifyRd = articleService.actorCanModify(rq.getLoginedMemberId(), article);
+
+		if (actorCanModifyRd.isFail()) {
+			return Ut.jsHistoryBackOnView(req, actorCanModifyRd.getMsg());
+		}
+
+		model.addAttribute("article", article);
+		return "usr/article/modify";
+	}
+	
+	/* 게시글 수정 */
+	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public ResultData<Integer> doModify(HttpServletRequest req , int id, String title, String body) {
+	public String doModify(HttpServletRequest req , int id, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getArticle(id);
 
 		if (article == null) {
-			return ResultData.from("F-3", Ut.f("%d글은 존재하지 않습니다", id), "id", id);
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 글은 존재하지 않습니다", id));
 		}
 
 		ResultData actorCanModifyRd = articleService.actorCanModify(rq.getLoginedMemberId(), article);
 
 		if (actorCanModifyRd.isFail()) {
-			return actorCanModifyRd;
+			return Ut.jsHistoryBack("F-2", actorCanModifyRd.getMsg());
 		}
+		
+		articleService.modifyArticle(id, title, body);
 
-		return articleService.modifyArticle(id, title, body);
+		return Ut.jsReplace("S-1", Ut.f("%d번 글을 수정했습니다", id), Ut.f("../article/detail?id=%d", id));
 	}
 
 	/* 게시글 삭제 */
 	@RequestMapping("/usr/article/delete")
 	@ResponseBody
-	public String doDelete(HttpServletRequest req , int id) {
-		
+	public String doDelete(HttpServletRequest req, int id) {
+
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getArticle(id);

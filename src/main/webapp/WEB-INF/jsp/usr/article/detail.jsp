@@ -41,7 +41,7 @@
 			</table>
 		</div>
 		<div class="btns">
-			<button class="btn-text-link" type="button" onclick="history.back()">뒤로가기</button>
+			<button class="btn-text-link" type="button" onclick="location.replace('../article/list')">뒤로가기</button>
 			<c:if test="${article.actorCanModify}">
 				<a class="btn-text-link" href="../article/modify?id=${article.id }">수정</a>
 			</c:if>
