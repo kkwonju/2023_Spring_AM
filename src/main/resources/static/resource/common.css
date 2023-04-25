@@ -63,3 +63,7 @@ header > div > ul > li > ul {
 header > div > ul > li:hover > ul {
 	display: block;	
 }
+
+header {
+	background-color: #03A696;
+}
