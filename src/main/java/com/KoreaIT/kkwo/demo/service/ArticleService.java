@@ -92,4 +92,8 @@ public class ArticleService {
 		articleRepository.deleteArticle(id);
 	}
 
+	public int getArticlesCount(int boardId) {
+		return articleRepository.getArticlesCount(boardId);
+	}
+
 }

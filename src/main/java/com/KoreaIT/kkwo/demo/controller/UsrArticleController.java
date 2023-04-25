@@ -29,7 +29,7 @@ public class UsrArticleController {
 	public String showWrite() {
 		return "usr/article/write";
 	}
-	
+
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
 	public String doWrite(HttpServletRequest req, String title, String body) {
@@ -47,8 +47,6 @@ public class UsrArticleController {
 		ResultData writeRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
 
 		int id = (int) writeRd.getData1();
-		
-		
 
 		return Ut.jsReplace("S-1", Ut.f("%d번 글이 생성되었습니다", id), "../article/list");
 	}
@@ -66,15 +64,18 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/list")
 	public String showList(HttpServletRequest req, Model model, int boardId) {
 		Rq rq = (Rq) req.getAttribute("rq");
-		
+
 		Board board = boardService.getBoardById(boardId);
-		if(board == null) {
+		if (board == null) {
 			return rq.jsHistoryBackOnView("없는 게시판");
 		}
+
+		int articlesCount = articleService.getArticlesCount(boardId);
 		
 		List<Article> articles = articleService.getForPrintArticles(boardId);
-		
+
 		model.addAttribute("board", board);
+		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("articles", articles);
 		return "usr/article/list";
 	}
@@ -100,11 +101,11 @@ public class UsrArticleController {
 		model.addAttribute("article", article);
 		return "usr/article/modify";
 	}
-	
+
 	/* 게시글 수정 */
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(HttpServletRequest req , int id, String title, String body) {
+	public String doModify(HttpServletRequest req, int id, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -119,7 +120,7 @@ public class UsrArticleController {
 		if (actorCanModifyRd.isFail()) {
 			return Ut.jsHistoryBack("F-2", actorCanModifyRd.getMsg());
 		}
-		
+
 		articleService.modifyArticle(id, title, body);
 
 		return Ut.jsReplace("S-1", Ut.f("%d번 글을 수정했습니다", id), Ut.f("../article/detail?id=%d", id));
