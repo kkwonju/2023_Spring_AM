@@ -9,7 +9,7 @@ import com.KoreaIT.kkwo.demo.vo.Article;
 
 @Mapper
 public interface ArticleRepository {
-	public void writeArticle(int memberId, String title, String body);
+	public void writeArticle(String title, String body, int memberId, int boardId);
 
 	@Select("""
 			SELECT *
@@ -66,4 +66,22 @@ public interface ArticleRepository {
 			</script>
 			""")
 	public int getArticlesCount(int boardId);
+
+	@Select("""
+			<script>
+			SELECT *, M.nickname AS extra__writer
+			FROM article AS A
+			INNER JOIN `member` AS M
+			ON A.memberId = M.id
+			WHERE 1
+			<if test="boardId != 0">
+				AND A.boardId = #{boardId}
+			</if>
+			ORDER BY A.id DESC
+			<if test="limitFrom >= 0">
+				LIMIT #{limitFrom}, #{itemsInAPage}
+			</if>
+			</script>
+			""")
+	public List<Article> getForPrintArticlesByCnt(int limitFrom, int itemsInAPage, int boardId);
 }

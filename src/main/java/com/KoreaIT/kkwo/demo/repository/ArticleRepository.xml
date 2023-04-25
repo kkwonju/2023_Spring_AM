@@ -11,7 +11,8 @@
 		updateDate = NOW(),
 		title = #{title},
 		`body` = #{body},
-		memberId = #{memberId}
+		memberId = #{memberId},
+		boardId = #{boardId}
 	</insert>
 	<!-- resultType="com.kkwo.demo.vo.Article" 써줘야하지만 application.yml에 써있으면 
 		생략가능 mybatis: type-aliases-package: com.kkwo.demo.vo -->

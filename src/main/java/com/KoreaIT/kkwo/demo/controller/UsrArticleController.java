@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.KoreaIT.kkwo.demo.service.ArticleService;
@@ -32,7 +33,7 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(String title, String body) {
+	public String doWrite(String title, String body, int boardId) {
 
 		if (Ut.empty(title)) {
 			return Ut.jsHistoryBack("F-1", "제목을 입력해주세요");
@@ -42,7 +43,7 @@ public class UsrArticleController {
 			return Ut.jsHistoryBack("F-2", "내용을 입력해주세요");
 		}
 
-		ResultData writeRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
+		ResultData writeRd = articleService.writeArticle(title, body, rq.getLoginedMemberId(), boardId);
 
 		int id = (int) writeRd.getData1();
 
@@ -58,19 +59,25 @@ public class UsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, int boardId) {
+	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId,
+			@RequestParam(defaultValue = "1") int page) {
 
 		Board board = boardService.getBoardById(boardId);
 		if (board == null) {
-			return rq.jsHistoryBackOnView("없는 게시판");
+			return rq.jsHistoryBackOnView("None");
 		}
-
 		int articlesCount = articleService.getArticlesCount(boardId);
 
-		List<Article> articles = articleService.getForPrintArticles(boardId);
+		int limitPage = 5;
+		int itemsInAPage = 10;
+		int totalPage = (int) Math.ceil((double) articlesCount / itemsInAPage);
 
-		model.addAttribute("board", board);
+		List<Article> articles = articleService.getForPrintArticlesByCnt(page, itemsInAPage, articlesCount, boardId);
+
+		model.addAttribute("page", page);
+		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("articlesCount", articlesCount);
+		model.addAttribute("board", board);
 		model.addAttribute("articles", articles);
 		return "usr/article/list";
 	}

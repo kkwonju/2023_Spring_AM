@@ -42,7 +42,7 @@ html>body {
 /* 라이브러리 */
 .table-box-type-1 th, .table-box-type-1 tbody td {
 	border: 1px solid black;
-	padding: 10px;
+	padding: 6px;
 	text-align: center;
 }
 
@@ -55,15 +55,35 @@ html>body {
 	color: deepskyblue;
 }
 
-header > div > ul > li > ul {
+header>div>ul>li>ul {
 	display: none;
 	position: absolute;
 }
 
-header > div > ul > li:hover > ul {
-	display: block;	
+header>div>ul>li:hover>ul {
+	display: block;
 }
 
 header {
 	background-color: #03A696;
+}
+
+select {
+	width: 200px;
+	height: 50px;
+}
+
+.page {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* 커스텀 */
+table {
+	width: 100%;
+}
+
+.red {
+	color: red;
 }

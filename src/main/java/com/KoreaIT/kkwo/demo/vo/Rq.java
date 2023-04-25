@@ -6,10 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import com.KoreaIT.kkwo.demo.service.MemberService;
 import com.KoreaIT.kkwo.demo.util.Ut;
 
 import lombok.Getter;
@@ -17,30 +19,42 @@ import lombok.Getter;
 @Component
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Rq {
+	private MemberService memberService;
 	@Getter
 	private boolean isLogined;
 	@Getter
+	private Member loginedMember;
+	@Getter
 	private int loginedMemberId;
+	@Getter
+	private int loginedMemberAuthLevel;
 
 	private HttpServletRequest req;
 	private HttpServletResponse resp;
 	private HttpSession session;
 
-	public Rq(HttpServletRequest req, HttpServletResponse resp) {
+	public Rq(HttpServletRequest req, HttpServletResponse resp, MemberService memberService) {
 		this.req = req;
 		this.resp = resp;
 		this.session = req.getSession();
+		this.memberService = memberService;
 
-		boolean isLogined = false;
 		int loginedMemberId = 0;
+		int loginedMemberAuthLevel = 0;
+		boolean isLogined = false;
+		Member loginedMember = null;
 
 		if (session.getAttribute("loginedMemberId") != null) {
 			isLogined = true;
 			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+			loginedMember = memberService.getMemberById(loginedMemberId);
+			loginedMemberAuthLevel = loginedMember.getAuthLevel();
 		}
 
 		this.isLogined = isLogined;
 		this.loginedMemberId = loginedMemberId;
+		this.loginedMember = loginedMember;
+		this.loginedMemberAuthLevel = loginedMemberAuthLevel;
 		
 		this.req.setAttribute("rq", this);
 	}

@@ -159,6 +159,7 @@ INSERT INTO article
 )
 SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 2) + 2, CONCAT('제목', RAND()), CONCAT('내용', RAND())
 
+
 ###################################
 DESC article;
 

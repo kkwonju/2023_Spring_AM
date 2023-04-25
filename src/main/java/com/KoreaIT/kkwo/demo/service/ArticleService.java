@@ -20,8 +20,8 @@ public class ArticleService {
 	}
 
 	/* 게시글 작성 */
-	public ResultData<Integer> writeArticle(int memberId, String title, String body) {
-		articleRepository.writeArticle(memberId, title, body);
+	public ResultData<Integer> writeArticle(String title, String body, int memberId, int boardId) {
+		articleRepository.writeArticle(title, body, memberId, boardId);
 		int id = articleRepository.getLastInsertId();
 		return ResultData.from("S-1", Ut.f("%d번 글 생성", id), "id", id);
 	}
@@ -94,6 +94,13 @@ public class ArticleService {
 
 	public int getArticlesCount(int boardId) {
 		return articleRepository.getArticlesCount(boardId);
+	}
+
+	public List<Article> getForPrintArticlesByCnt(int page, int itemsInAPage, int articlesCount, int boardId) {
+		
+		int limitFrom = (page - 1) * itemsInAPage;
+		
+		return articleRepository.getForPrintArticlesByCnt(limitFrom, itemsInAPage, boardId); 
 	}
 
 }

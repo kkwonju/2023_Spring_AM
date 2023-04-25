@@ -8,10 +8,10 @@
 <title>${pageTitle}</title>
 
 <!-- 테일윈드 불러오기 -->
-<script src="https://cdn.tailwindcss.com"></script>
+<!-- <script src="https://cdn.tailwindcss.com"></script> -->
 <!-- 데이지UI 불러오기 -->
-<link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css"
-	rel="stylesheet" type="text/css" />
+<!-- <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" -->
+<!-- 	rel="stylesheet" type="text/css" /> -->
 
 
 <!-- 폰트어썸 불러오기 -->
@@ -33,7 +33,7 @@
 	<header>
 		<div class=" h-20 flex container mx-auto text-4xl">
 			<a href="/" class=" flex items-center px-3">
-				<span>로고</span>
+				<span><i class="fa-brands fa-java"></i></span>
 			</a>
 
 			<div class="flex-grow"></div>
@@ -50,17 +50,17 @@
 					</a>
 					<ul>
 						<li class="hover:underline">
-							<a href="/usr/article/list?boardId=1">
+							<a href="/usr/article/list?boardId=1&page=1">
 								<span>Notice</span>
 							</a>
 						</li>
 						<li class="hover:underline">
-							<a href="/usr/article/list?boardId=2">
+							<a href="/usr/article/list?boardId=2&page=1">
 								<span>Free</span>
 							</a>
 						</li>
 						<li class="hover:underline">
-							<a href="/usr/article/list?boardId=3">
+							<a href="/usr/article/list?boardId=3&page=1">
 								<span>QnA</span>
 							</a>
 						</li>
