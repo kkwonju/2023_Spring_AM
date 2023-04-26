@@ -3,6 +3,27 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="pageTitle" value="Article Detail" />
 <%@ include file="../common/head.jspf"%>
+
+<script>
+	const params = {}
+	params.id = parseInt('${param.id}');
+</script>
+
+<script>
+	function ArticleDetail__increaseHitCount() {
+		$.get('../article/increaseHitCountRd', {
+			id : params.id,
+			ajaxMode : 'Y'
+		}, function(data) {
+			$('.article-detail__hit-count').empty().html(data.data1);
+		}, 'json');
+	}
+
+	$(function() {
+		setTimeout(ArticleDetail__increaseHitCount, 2000);
+	})
+</script>
+
 <section class="mt-8 text-xl">
 	<div class="container mx-auto px-3">
 		<div class="table-box-type-1">
@@ -34,7 +55,9 @@
 					</tr>
 					<tr>
 						<th>조회 수</th>
-						<td>${article.hitCount }</td>
+						<td>
+							<span class="article-detail__hit-count">${article.hitCount }</span>
+						</td>
 					</tr>
 					<tr>
 						<th>제목</th>
@@ -48,7 +71,8 @@
 			</table>
 		</div>
 		<div>
-			<button class="btn-text-link" type="button" onclick="location.replace('../article/list')">뒤로가기</button>
+			<button class="btn-text-link" type="button"
+				onclick="location.replace('../article/list')">뒤로가기</button>
 			<c:if test="${article.actorCanModify}">
 				<a class="btn-text-link" href="../article/modify?id=${article.id }">수정</a>
 			</c:if>
