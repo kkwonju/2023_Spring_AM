@@ -98,7 +98,7 @@
 			<h1 class="">${pageTitle }&nbsp;PAGE</h1>
 		</div>
 		<div class="searchBox">
-			<form action="" class="searchForm" method="POST">
+			<form action="../article/list" class="searchForm" method="GET">
 				<input type="text" name="searchKeyword" />
 				<button type="submit">검색</button>
 			</form>

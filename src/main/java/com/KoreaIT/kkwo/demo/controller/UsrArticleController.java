@@ -53,6 +53,7 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(Model model, int id) {
 
+		articleService.increaseHitCount(id);
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 		model.addAttribute(article);
 		return "usr/article/detail";
@@ -60,26 +61,30 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId,
-			@RequestParam(defaultValue = "1") int page) {
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "title,body") String searchKeywordTypeCode,
+			@RequestParam(defaultValue = "") String searchKeyword) {
 
 		Board board = boardService.getBoardById(boardId);
-		
+
 		if (board == null) {
 			return rq.jsHistoryBackOnView("None");
 		}
-		
-		int articlesCount = articleService.getArticlesCount(boardId);
+
+		int articlesCount = articleService.getArticlesCount(boardId, searchKeywordTypeCode, searchKeyword);
 
 		int itemsInAPage = 10;
 		int totalPage = (int) Math.ceil((double) articlesCount / itemsInAPage);
 
-		List<Article> articles = articleService.getForPrintArticlesByCnt(page, itemsInAPage, articlesCount, boardId);
+		List<Article> articles = articleService.getForPrintArticles(page, itemsInAPage, articlesCount, boardId, searchKeywordTypeCode, searchKeyword);
 
 		model.addAttribute("page", page);
 		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("board", board);
 		model.addAttribute("articles", articles);
+		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
+		model.addAttribute("searchKeyword", searchKeyword);
 		return "usr/article/list";
 	}
 

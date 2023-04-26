@@ -92,15 +92,18 @@ public class ArticleService {
 		articleRepository.deleteArticle(id);
 	}
 
-	public int getArticlesCount(int boardId) {
-		return articleRepository.getArticlesCount(boardId);
+	public int getArticlesCount(int boardId, String searchKeywordTypeCode, String searchKeyword) {
+		return articleRepository.getArticlesCount(boardId, searchKeywordTypeCode, searchKeyword);
 	}
 
-	public List<Article> getForPrintArticlesByCnt(int page, int itemsInAPage, int articlesCount, int boardId) {
+	public List<Article> getForPrintArticles(int page, int itemsInAPage, int articlesCount, int boardId, String searchKeywordTypeCode, String searchKeyword) {
 		
 		int limitFrom = (page - 1) * itemsInAPage;
 		
-		return articleRepository.getForPrintArticlesByCnt(limitFrom, itemsInAPage, boardId); 
+		return articleRepository.getForPrintArticles(limitFrom, itemsInAPage, boardId, searchKeywordTypeCode, searchKeyword); 
 	}
 
+	public void increaseHitCount(int id) {
+		articleRepository.increaseHitCount(id);
+	}
 }

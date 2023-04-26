@@ -13,8 +13,12 @@
 				</colgroup>
 				<tbody>
 					<tr>
-						<th>번호</th>
+						<th>게시판</th>
 						<td>${article.id }</td>
+					</tr>
+					<tr>
+						<th>번호</th>
+						<td>${article.boardId}</td>
 					</tr>
 					<tr>
 						<th>작성 날짜</th>
@@ -27,6 +31,10 @@
 					<tr>
 						<th>작성자</th>
 						<td>${article.extra__writer }</td>
+					</tr>
+					<tr>
+						<th>조회 수</th>
+						<td>${article.hitCount }</td>
 					</tr>
 					<tr>
 						<th>제목</th>

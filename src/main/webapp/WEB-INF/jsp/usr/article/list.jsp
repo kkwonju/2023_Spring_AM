@@ -21,6 +21,7 @@
 						<th>날짜</th>
 						<th>제목</th>
 						<th>작성자</th>
+						<th>조회수</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -32,6 +33,7 @@
 								<a class="hover:underline" href="detail?id=${article.id }">${article.title }</a>
 							</td>
 							<td>${article.extra__writer }</td>
+							<td>${article.hitCount }</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -40,20 +42,25 @@
 	</div>
 	<div class="page container my-3">
 
-
 		<c:set var="paginationLen" value="4" />
 		<c:set var="startPage" value="${page - paginationLen >= 1 ? page - paginationLen : 1}" />
 		<c:set var="endPage" value="${page + paginationLen <= totalPage ? page + paginationLen : totalPage}" />
+		
+		<c:set var="baseUri" value="?boardId=${board.id}"/>
+		<c:set var="baseUri" value="${baseUri}&searchKeywordTypeCode=${searchKeywordTypeCode}"/>
+		<c:set var="baseUri" value="${baseUri}&seachKeyword=${seachKeyword}"/>
+		
 		<c:if test="${page > 1}">
-			<a href="list?boardId=${board.id}&page=1"> << </a>
+			<a href="${baseUri}&page=1"> << </a>
 		</c:if>
 		<c:forEach begin="${startPage}" end="${endPage}" var="i">
 			&nbsp;
-			<a class="${page == i ? 'red' : ''}" href="list?boardId=${board.id}&page=${i}">${i}</a>
+			<a class="${page == i ? 'red' : ''}" href="${baseUri}&page=${i}">${i}</a>
 			&nbsp;
 		</c:forEach>
 		<c:if test="${page < totalPage}">
-			<a href="list?boardId=${board.id}&page=${totalPage}"> >> </a>
+			<a href="${baseUri}&page=${totalPage}"> >> </a>
+			
 		</c:if>
 	</div>
 </section>
