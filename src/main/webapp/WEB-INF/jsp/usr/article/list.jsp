@@ -48,7 +48,7 @@
 		
 		<c:set var="baseUri" value="?boardId=${board.id}"/>
 		<c:set var="baseUri" value="${baseUri}&searchKeywordTypeCode=${searchKeywordTypeCode}"/>
-		<c:set var="baseUri" value="${baseUri}&seachKeyword=${seachKeyword}"/>
+		<c:set var="baseUri" value="${baseUri}&searchKeyword=${searchKeyword}"/>
 		
 		<c:if test="${page > 1}">
 			<a href="${baseUri}&page=1"> << </a>

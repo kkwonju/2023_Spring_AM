@@ -53,16 +53,23 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(Model model, int id) {
 
-		articleService.increaseHitCount(id);
+		ResultData increaseHitCountRd = articleService.increaseHitCount(id);
+		
+		if(increaseHitCountRd.isFail()) {
+			return rq.jsHistoryBackOnView(increaseHitCountRd.getMsg());
+		}
+		
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+		
 		model.addAttribute(article);
+		
 		return "usr/article/detail";
 	}
 
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId,
 			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "title,body") String searchKeywordTypeCode,
+			@RequestParam(defaultValue = "title, body, nickname") String searchKeywordTypeCode,
 			@RequestParam(defaultValue = "") String searchKeyword) {
 
 		Board board = boardService.getBoardById(boardId);

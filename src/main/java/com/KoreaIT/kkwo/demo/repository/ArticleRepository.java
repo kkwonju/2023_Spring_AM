@@ -107,5 +107,5 @@ public interface ArticleRepository {
 			WHERE id = #{id}
 			</script>
 			""")
-	public void increaseHitCount(int id);
+	public int increaseHitCount(int id);
 }

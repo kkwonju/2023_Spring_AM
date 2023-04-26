@@ -103,7 +103,13 @@ public class ArticleService {
 		return articleRepository.getForPrintArticles(limitFrom, itemsInAPage, boardId, searchKeywordTypeCode, searchKeyword); 
 	}
 
-	public void increaseHitCount(int id) {
-		articleRepository.increaseHitCount(id);
+	public ResultData increaseHitCount(int id) {
+		int affectRowCount = articleRepository.increaseHitCount(id);
+		
+		if(affectRowCount == 0) {
+			return ResultData.from("F-1", "해당 게시물이 없음", "affectRowRd", affectRowCount);
+		}
+		
+		return ResultData.from("S-1", "조회수 증가", "affectRowRd", affectRowCount);
 	}
 }
