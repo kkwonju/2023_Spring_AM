@@ -34,20 +34,20 @@ public interface ArticleRepository {
 			""")
 	public List<Article> getArticles();
 
-	@Select("""
-			<script>
-			SELECT *, M.nickname AS extra__writer
-			FROM article AS A
-			INNER JOIN `member` AS M
-			ON A.memberId = M.id
-			WHERE 1
-			<if test="boardId != 0">
-				AND A.boardId = #{boardId}
-			</if>
-			ORDER BY A.id DESC
-			</script>
-			""")
-	public List<Article> getForPrintArticles(int boardId);
+//	@Select("""
+//			<script>
+//			SELECT *, M.nickname AS extra__writer
+//			FROM article AS A
+//			INNER JOIN `member` AS M
+//			ON A.memberId = M.id
+//			WHERE 1
+//			<if test="boardId != 0">
+//				AND A.boardId = #{boardId}
+//			</if>
+//			ORDER BY A.id DESC
+//			</script>
+//			""")
+//	public List<Article> getForPrintArticles(int boardId);
 
 	public void modifyArticle(int id, String title, String body);
 

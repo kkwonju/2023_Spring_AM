@@ -12,7 +12,7 @@
 				<colgroup>
 					<col width="140" />
 					<col width="200" />
-					<col/>
+					<col />
 					<col width="140" />
 				</colgroup>
 				<thead>
@@ -38,11 +38,16 @@
 			</table>
 		</div>
 	</div>
-	<div class="page container">
+	<div class="page container my-3">
+
+
+		<c:set var="paginationLen" value="4" />
+		<c:set var="startPage" value="${page - paginationLen >= 1 ? page - paginationLen : 1}" />
+		<c:set var="endPage" value="${page + paginationLen <= totalPage ? page + paginationLen : totalPage}" />
 		<c:if test="${page > 1}">
 			<a href="list?boardId=${board.id}&page=1"> << </a>
 		</c:if>
-		<c:forEach begin="${page - 5 < 1 ? 1 : page - 5}" end="${page + 5 > totalPage ? totalPage : page + 5}" var="i">
+		<c:forEach begin="${startPage}" end="${endPage}" var="i">
 			&nbsp;
 			<a class="${page == i ? 'red' : ''}" href="list?boardId=${board.id}&page=${i}">${i}</a>
 			&nbsp;

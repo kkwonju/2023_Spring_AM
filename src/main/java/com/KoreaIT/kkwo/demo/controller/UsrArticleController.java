@@ -47,7 +47,7 @@ public class UsrArticleController {
 
 		int id = (int) writeRd.getData1();
 
-		return Ut.jsReplace("S-1", Ut.f("%d번 글이 생성되었습니다", id), "../article/list");
+		return Ut.jsReplace("S-1", Ut.f("%d번 글이 생성되었습니다", id), Ut.f("../article/list?boardId=%d", boardId));
 	}
 
 	@RequestMapping("/usr/article/detail")
@@ -63,12 +63,13 @@ public class UsrArticleController {
 			@RequestParam(defaultValue = "1") int page) {
 
 		Board board = boardService.getBoardById(boardId);
+		
 		if (board == null) {
 			return rq.jsHistoryBackOnView("None");
 		}
+		
 		int articlesCount = articleService.getArticlesCount(boardId);
 
-		int limitPage = 5;
 		int itemsInAPage = 10;
 		int totalPage = (int) Math.ceil((double) articlesCount / itemsInAPage);
 

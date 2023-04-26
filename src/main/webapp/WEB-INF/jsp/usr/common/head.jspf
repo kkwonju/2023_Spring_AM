@@ -33,7 +33,9 @@
 	<header>
 		<div class=" h-20 flex container mx-auto text-4xl">
 			<a href="/" class=" flex items-center px-3">
-				<span><i class="fa-brands fa-java"></i></span>
+				<span>
+					<i class="fa-brands fa-java"></i>
+				</span>
 			</a>
 
 			<div class="flex-grow"></div>
@@ -91,9 +93,15 @@
 			</ul>
 		</div>
 	</header>
-	<section class="my-3 text-2xl">
-		<div class="container mx-auto px-3">
-			<h1>${pageTitle }&nbsp;PAGE</h1>
+	<section class="utilBar container">
+		<div class="pageInfoBox">
+			<h1 class="">${pageTitle }&nbsp;PAGE</h1>
+		</div>
+		<div class="searchBox">
+			<form action="" class="searchForm" method="POST">
+				<input type="text" name="searchKeyword" />
+				<button type="submit">검색</button>
+			</form>
 		</div>
 	</section>
 	<hr />

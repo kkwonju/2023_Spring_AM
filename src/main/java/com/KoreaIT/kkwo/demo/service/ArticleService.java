@@ -73,10 +73,10 @@ public class ArticleService {
 		return ResultData.from("S-1", "수정 가능");
 	}
 	
-	/* 출력용 게시글 목록 가져오기 */
-	public List<Article> getForPrintArticles(int boardId) {
-		return articleRepository.getForPrintArticles(boardId);
-	}
+//	/* 출력용 게시글 목록 가져오기 */
+//	public List<Article> getForPrintArticles(int boardId) {
+//		return articleRepository.getForPrintArticles(boardId);
+//	}
 
 	/* 게시글 수정 */
 	public ResultData modifyArticle(int id, String title, String body) {
