@@ -90,6 +90,10 @@ table {
 	color: red;
 }
 
+.bgc-red {
+	background-color: red;
+}
+
 .con {
 	width: 1024px;
 	margin-right: auto;

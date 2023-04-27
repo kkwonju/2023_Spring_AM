@@ -6,7 +6,7 @@
 
 <script>
 	const params = {}
-	params.id = parseInt('${param.id}');	
+	params.id = parseInt('${param.id}');
 </script>
 
 <script>
@@ -31,6 +31,26 @@
 		ArticleDetail__increaseHitCount();
 // 		setTimeout(ArticleDetail__increaseHitCount, 2000);
 	})
+</script>
+
+<script>
+	function ArticleDetail__increaseReactionPoint() {
+		const localStorageKey2 = 'article__' + params.id + '__alreadyClickBtn';
+		
+		if(localStorage.getItem(localStorageKey2)){
+			return;
+		}
+		
+		localStorage.setItem(localStorageKey2, true);
+		
+		$.get('../reactionPoint/increaseReactionPointRd', {
+			id : params.id,
+			memberId : ${article.memberId},
+			ajaxMode : 'Y'
+		}, function(data) {
+			$('.article-detail__reactionPoint').empty().html(data.data1);
+		}, 'json');
+	}
 </script>
 
 <section class="mt-8 text-xl">
@@ -82,12 +102,15 @@
 					</tr>
 					<tr>
 						<th>좋아요 합</th>
-					<td>${article.extra__goodReactionPoint }</td>
+						<td>
+							<span class="article-detail__reactionPoint">${article.extra__goodReactionPoint }</span>
+						</td>
 					</tr>
 					<tr>
 						<th>싫어요 합</th>
 						<td>${article.extra__badReactionPoint }</td>
 					</tr>
+					<button class="RPbtn" onclick="ArticleDetail__increaseReactionPoint();">좋아요</button>
 				</tbody>
 			</table>
 		</div>
