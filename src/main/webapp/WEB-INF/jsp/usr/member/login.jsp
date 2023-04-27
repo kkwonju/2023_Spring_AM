@@ -16,7 +16,7 @@
 					<tbody>
 						<tr>
 							<th>아이디</th>
-							<td><input autocomplete="off" type="text" name="loginId" /></td>
+							<td><input autocomplete="off" autofocus type="text" name="loginId" /></td>
 						</tr>
 						<tr>
 							<th>비밀번호</th>

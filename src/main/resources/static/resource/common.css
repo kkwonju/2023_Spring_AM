@@ -58,10 +58,12 @@ html>body {
 header>div>ul>li>ul {
 	display: none;
 	position: absolute;
+	font-size: 0.8em;
 }
 
 header>div>ul>li:hover>ul {
 	display: block;
+	background-color: #03A696;
 }
 
 header {

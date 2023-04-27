@@ -20,7 +20,8 @@
 	}
 
 	$(function() {
-		setTimeout(ArticleDetail__increaseHitCount, 2000);
+		ArticleDetail__increaseHitCount();
+// 		setTimeout(ArticleDetail__increaseHitCount, 2000);
 	})
 </script>
 
