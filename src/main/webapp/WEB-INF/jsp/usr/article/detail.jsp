@@ -76,6 +76,18 @@
 						<th>내용</th>
 						<td>${article.body }</td>
 					</tr>
+					<tr>
+						<th>반응 합</th>
+						<td>${article.extra__sumReactionPoint }</td>
+					</tr>
+					<tr>
+						<th>좋아요 합</th>
+					<td>${article.extra__goodReactionPoint }</td>
+					</tr>
+					<tr>
+						<th>싫어요 합</th>
+						<td>${article.extra__badReactionPoint }</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
