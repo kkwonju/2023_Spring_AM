@@ -23,6 +23,7 @@
 						<th>제목</th>
 						<th>작성자</th>
 						<th>조회수</th>
+						<th>추천</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -35,6 +36,7 @@
 							</td>
 							<td>${article.extra__writer }</td>
 							<td>${article.hitCount }</td>
+							<td>${article.extra__goodReactionPoint }</td>
 						</tr>
 					</c:forEach>
 				</tbody>

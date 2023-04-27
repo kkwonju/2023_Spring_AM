@@ -69,10 +69,12 @@ public interface ArticleRepository {
 
 	@Select("""
 			<script>
-			SELECT *, M.nickname AS extra__writer
+			SELECT *, M.nickname AS extra__writer, SUM(R.
 			FROM article AS A
 			INNER JOIN `member` AS M
 			ON A.memberId = M.id
+			INNER JOIN reactionPoint AS R
+			ON A.id = R.relId
 			WHERE 1
 			<if test="boardId != 0">
 				AND A.boardId = #{boardId}
