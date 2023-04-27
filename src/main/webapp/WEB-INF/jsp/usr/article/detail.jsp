@@ -6,11 +6,19 @@
 
 <script>
 	const params = {}
-	params.id = parseInt('${param.id}');
+	params.id = parseInt('${param.id}');	
 </script>
 
 <script>
 	function ArticleDetail__increaseHitCount() {
+		const localStorageKey = 'article__' + params.id + '__alreadyView';
+		
+		if(localStorage.getItem(localStorageKey)){
+			return;
+		}
+		
+		localStorage.setItem(localStorageKey, true);
+		
 		$.get('../article/increaseHitCountRd', {
 			id : params.id,
 			ajaxMode : 'Y'
