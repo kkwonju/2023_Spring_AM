@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.taglibs.standard.tag.common.sql.QueryTagSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -94,7 +95,25 @@ public class Rq {
 	public void logout() {
 		session.removeAttribute("loginedMemberId");
 	}
-
+	
+	// uri 가져오기
+	public String getCurrentUri() {
+		String currentUri = req.getRequestURI();
+		String queryString = req.getQueryString();
+		
+		if(queryString != null && queryString.length() > 0) {
+			currentUri += "?" + queryString;
+		}
+		
+		return currentUri;
+	}
+	
+	public String getEncodedCurrentUri() {
+		return Ut.getEncodedCurrentUri(getCurrentUri());
+	}
+	
+	// Rq 객체 유도
+	// 삭제 x, BeforeActionInterceptor에서 강제 호출
 	public void initOnBeforeActionInterceptor() {
 	}
 

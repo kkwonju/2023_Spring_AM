@@ -1,5 +1,8 @@
 package com.KoreaIT.kkwo.demo.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -67,5 +70,14 @@ public class Ut {
 		req.setAttribute("msg", msg);
 		req.setAttribute("historyBack", true);
 		return "usr/common/js";
+	}
+
+	public static String getEncodedCurrentUri(String currentUri) {
+		try {
+			return URLEncoder.encode(currentUri, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return currentUri;
+		}
 	}
 }

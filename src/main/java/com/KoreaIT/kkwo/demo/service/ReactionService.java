@@ -11,30 +11,47 @@ import com.KoreaIT.kkwo.demo.vo.ResultData;
 public class ReactionService {
 	@Autowired
 	private ReactionRepository reactionRepository;
+	@Autowired
+	private ArticleService articleService;
 
 	public boolean actorCanMakeReaction(int actorId, String relTypeCode, int relId) {
 		return reactionRepository.getSumReactionPointByMemberId(actorId, relTypeCode, relId) == 0;
 	}
+
+	public ResultData addGoodReactionPoint(int actorId, String relTypeCode, int relId) {
+		int affectedRow = reactionRepository.addGoodReactionPoint(actorId, relTypeCode, relId);
+		
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "좋아요 처리 실패");
+		}
+		
+		switch (relTypeCode) {
+		case "article":
+			articleService.increaseGoodReactionPoint(relId);
+			break;
+//		case "reply":
+//			replyService.
+		}
+		
+		return ResultData.from("S-1", "좋아요 처리됌");
+	}
 	
-	public ResultData increaseReactionPoint(int memberId, int relId) {
-		int affectRowCount = reactionRepository.increaseReactionPoint(memberId, relId);
-
-		if (affectRowCount == 0) {
-			ResultData.from("F-1", "반응 추가 실패", "affectRowRd", affectRowCount);
+	public ResultData addBadReactionPoint(int actorId, String relTypeCode, int relId) {
+		int affectedRow = reactionRepository.addBadReactionPoint(actorId, relTypeCode, relId);
+		
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "싫어요 처리 실패");
 		}
-		return ResultData.from("S-1", "반응 추가 성공", "affectRowRd", affectRowCount);
-	}
-
-	public ResultData decreaseReactionPoint(int memberId, int relId) {
-		int affectRowCount = reactionRepository.decreaseReactionPoint(memberId, relId);
-
-		if (affectRowCount == 0) {
-			ResultData.from("F-1", "반응 삭제 실패", "affectRowRd", affectRowCount);
+		
+		switch (relTypeCode) {
+		case "article":
+			articleService.increaseBadReactionPoint(relId);
+			break;
+//		case "reply":
+//			replyService.
 		}
-		return ResultData.from("S-1", "반응 삭제 성공", "affectRowRd", affectRowCount);
+		
+		return ResultData.from("S-1", "싫어요 처리됌");
 	}
 
-	public ReactionPoint getReactionPoint(int relId) {
-		return reactionRepository.getReactionPoint(relId);
-	}
 }

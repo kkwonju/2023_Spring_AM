@@ -5,8 +5,6 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import com.KoreaIT.kkwo.demo.vo.ReactionPoint;
-
 @Mapper
 public interface ReactionRepository {
 
@@ -22,33 +20,62 @@ public interface ReactionRepository {
 			""")
 	public int getSumReactionPointByMemberId(int actorId, String relTypeCode, int id);
 	
+	@Select("""
+			<script>
+				SELECT
+				IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)), 0)
+				FROM reactionPoint AS RP
+				WHERE RP.relTypeCode = 'article'
+				AND RP.relId = #{id}
+				AND RP.memberId = #{actorId}
+			</script>
+			""")
+	public int getSumGoodReactionPointByMemberId(int actorId, String relTypeCode, int id);
+	
+	@Select("""
+			<script>
+				SELECT
+				IFNULL(SUM(IF(RP.point &lt; 0, RP.point * -1, 0)), 0)
+				FROM reactionPoint AS RP
+				WHERE RP.relTypeCode = 'article'
+				AND RP.relId = #{id}
+				AND RP.memberId = #{actorId}
+			</script>
+			""")
+	public int getSumBadReactionPointByMemberId(int actorId, String relTypeCode, int id);
+	
 	@Insert("""
 			<script>
 			INSERT INTO reactionPoint
 			SET regDate = NOW(),
 			updateDate = NOW(),
-			memberId = #{memberId},
-			relTypeCode = 'article',
+			memberId = #{actorId},
+			relTypeCode = #{relTypeCode},
 			relId = #{relId},
 			`point` = 1
 			</script>
 			""")
-	public int increaseReactionPoint(int memberId, int relId);
+	public int addGoodReactionPoint(int actorId, String relTypeCode, int relId);
+	
+	@Insert("""
+			<script>
+			INSERT INTO reactionPoint
+			SET regDate = NOW(),
+			updateDate = NOW(),
+			memberId = #{actorId},
+			relTypeCode = #{relTypeCode},
+			relId = #{relId},
+			`point` = -1
+			</script>
+			""")
+	public int addBadReactionPoint(int actorId, String relTypeCode, int relId);
 
 	@Delete("""
 			DELETE FROM reactionPoint
-			WHERE memberId = #{memberId} AND relId = #{relId}
+			WHERE
+			relTypeCode =${relTypeCode}
+			AND relId = #{relId}
+			AND memberId = #{actorId}
 			""")
-	public int decreaseReactionPoint(int memberId, int relId);
-
-	@Select("""
-			SELECT
-				IFNULL(SUM(RP.point), 0) AS extra__sumReactionPoint
-				ABS(IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)),0)) AS extra__goodReactionPoint
-				ABS(IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)),0)) AS extra__badReactionPoint
-			FROM reactionPoint AS RP
-			WHERE relId = #{relId}
-			""")
-	public ReactionPoint getReactionPoint(int relId);
-
+	public int removeReactionPoint(int actorId, String relTypeCode, int relId);
 }

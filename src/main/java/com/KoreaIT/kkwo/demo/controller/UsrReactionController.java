@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.KoreaIT.kkwo.demo.service.ReactionService;
+import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 import com.KoreaIT.kkwo.demo.vo.Rq;
 
@@ -16,35 +17,41 @@ public class UsrReactionController {
 	@Autowired
 	private Rq rq;
 
-	@RequestMapping("/usr/reactionPoint/increaseReactionPointRd")
+	@RequestMapping("/usr/reactionPoint/doGoodReaction")
 	@ResponseBody
-	public ResultData increaseReactionPointRd(int memberId, int id) {
+	public String doGoodReaction(String relTypeCode, int relId, String replaceUri) {
+		boolean actorCanMakeReaction = reactionService.actorCanMakeReaction(rq.getLoginedMemberId(), relTypeCode,
+				relId);
 		
-		ResultData increaseReactionPointRd = reactionService.increaseReactionPoint(memberId, id);
-		
-		if(increaseReactionPointRd.isFail()) {
-			return increaseReactionPointRd;
+		if (actorCanMakeReaction == false) {
+			return Ut.jsHistoryBack("F-1" , "이미 누름");
+		}
+
+		ResultData rd = reactionService.addGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
+
+		if(rd.isFail()) {
+			return Ut.jsHistoryBack(rd.getResultCode(), rd.getMsg());
 		}
 		
-		ResultData rd = ResultData.newData(increaseReactionPointRd, "reactionPoint", reactionService.getReactionPoint(id));
-		
-		rd.setData2("id", id);
-		
-		return rd;
+		return Ut.jsReplace("S-1", "좋아요!", replaceUri);
 	}
-	
-	@RequestMapping("/usr/reactionPoint/decreaseReactionPointRd")
+
+	@RequestMapping("/usr/reactionPoint/doBadReaction")
 	@ResponseBody
-	public ResultData decreaseReactionPointRd(int memberId, int id) {
+	public String doBadReaction(String relTypeCode, int relId, String replaceUri) {
+		boolean actorCanMakeReaction = reactionService.actorCanMakeReaction(rq.getLoginedMemberId(), relTypeCode,
+				relId);
 		
-		ResultData decreaseReactionPointRd = reactionService.decreaseReactionPoint(memberId, id);
-		
-		if(decreaseReactionPointRd.isFail()) {
-			return decreaseReactionPointRd;
+		if (actorCanMakeReaction == false) {
+			return Ut.jsHistoryBack("F-1", "이미 누름");
 		}
+
+		ResultData rd = reactionService.addBadReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
 		
-		ResultData rd = ResultData.newData(decreaseReactionPointRd, "reactionPoint", reactionService.getReactionPoint(id));
-		
-		return rd;
+		if(rd.isFail()) {
+			return Ut.jsHistoryBack(rd.getResultCode(), rd.getMsg());
+		}
+
+		return Ut.jsReplace("S-1", "싫어요!", replaceUri);
 	}
 }

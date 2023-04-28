@@ -12,13 +12,13 @@
 <script>
 	function ArticleDetail__increaseHitCount() {
 		const localStorageKey = 'article__' + params.id + '__alreadyView';
-		
-		if(localStorage.getItem(localStorageKey)){
+
+		if (localStorage.getItem(localStorageKey)) {
 			return;
 		}
-		
+
 		localStorage.setItem(localStorageKey, true);
-		
+
 		$.get('../article/increaseHitCountRd', {
 			id : params.id,
 			ajaxMode : 'Y'
@@ -29,33 +29,32 @@
 
 	$(function() {
 		ArticleDetail__increaseHitCount();
-// 		setTimeout(ArticleDetail__increaseHitCount, 2000);
 	})
 </script>
 
 <script>
-	function ArticleDetail__increaseReactionPoint() {
-		const localStorageKey2 = 'article__' + params.id + '__alreadyClickBtn';
-		
-		if(localStorage.getItem(localStorageKey2)){
-			return;
-		}
-		
-		localStorage.setItem(localStorageKey2, true);
-		
-		$.get('../reactionPoint/increaseReactionPointRd', {
-			id : params.id,
-			memberId : ${article.memberId},
-			ajaxMode : 'Y'
-		}, function(data) {
-			$('.article-detail__reactionPoint').empty().html(data.data1);
-		}, 'json');
-	}
-	
-	function btnColorChange() {
-		const $btn = $('.RPbtn');
-		$btn.toggleClass('bgc-red');
-	}
+	// 	function ArticleDetail__increaseReactionPoint() {
+	// 		const localStorageKey2 = 'article__' + params.id + '__alreadyClickBtn';
+
+	// 		if(localStorage.getItem(localStorageKey2)){
+	// 			return;
+	// 		}
+
+	// 		localStorage.setItem(localStorageKey2, true);
+
+	// 		$.get('../reactionPoint/increaseReactionPointRd', {
+	// 			id : params.id,
+	// 			memberId : ${article.memberId},
+	// 			ajaxMode : 'Y'
+	// 		}, function(data) {
+	// 			$('.article-detail__reactionPoint').empty().html(data.data1);
+	// 		}, 'json');
+	// 	}
+
+	// 	function btnColorChange() {
+	// 		const $btn = $('.RPbtn');
+	// 		$btn.toggleClass('bgc-red');
+	// 	}
 </script>
 
 <section class="mt-8 text-xl">
@@ -105,17 +104,21 @@
 						<th>추천</th>
 						<td>
 							<span>좋아요 : ${article.goodReactionPoint }</span>
-							<span>싫어요 : ${article.badReactionPoint }</span>		
-							<br />					
-							<c:if test="${actorCanMakeReaction}">
-								<span>
-									<button>👍</button>
-								</span>
-								&nbsp;&nbsp;&nbsp;
-								<span>
-									<button>👎</button>
-								</span>
-							</c:if>
+							<span>싫어요 : ${article.badReactionPoint }</span>
+							<br />
+							<%-- 							<c:if test="${actorCanMakeReaction}"> --%>
+							<span>
+								<a class="my_btn"
+									href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}">
+									좋아요 👍</a>
+							</span>
+							&nbsp;&nbsp;&nbsp;
+							<span>
+								<a class="my_btn"
+									href="/usr/reactionPoint/doBadReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.encodedCurrentUri}">
+									싫어요 👎</a>
+							</span>
+							<%-- 							</c:if> --%>
 						</td>
 					</tr>
 				</tbody>
