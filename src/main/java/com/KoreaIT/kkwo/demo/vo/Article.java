@@ -16,12 +16,10 @@ public class Article {
 	private int memberId;
 	private int boardId;
 	private int hitCount;
+	private int goodReactionPoint;
+	private int badReactionPoint;
 	
 	private String extra__writer;
-	
-	private int extra__sumReactionPoint;
-	private int extra__goodReactionPoint;
-	private int extra__badReactionPoint;
 	
 	private boolean actorCanDelete;
 	private boolean actorCanModify;
