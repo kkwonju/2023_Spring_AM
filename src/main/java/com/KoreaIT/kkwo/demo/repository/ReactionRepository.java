@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import com.KoreaIT.kkwo.demo.vo.ReactionPoint;
+
 @Mapper
 public interface ReactionRepository {
 
@@ -29,10 +31,12 @@ public interface ReactionRepository {
 
 	@Select("""
 			SELECT
-			ABS(IFNULL(SUM(IF(RP.point > 0, RP.point, 0)),0)) AS extra__goodReactionPoint
+				IFNULL(SUM(RP.point), 0) AS extra__sumReactionPoint
+				ABS(IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)),0)) AS extra__goodReactionPoint
+				ABS(IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)),0)) AS extra__badReactionPoint
 			FROM reactionPoint AS RP
 			WHERE relId = #{relId}
 			""")
-	public Object getReactionPoint(int relId);
+	public ReactionPoint getReactionPoint(int relId);
 
 }

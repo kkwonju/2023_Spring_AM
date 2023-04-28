@@ -51,6 +51,11 @@
 			$('.article-detail__reactionPoint').empty().html(data.data1);
 		}, 'json');
 	}
+	
+	function btnColorChange() {
+		const $btn = $('.RPbtn');
+		$btn.toggleClass('bgc-red');
+	}
 </script>
 
 <section class="mt-8 text-xl">
@@ -97,20 +102,19 @@
 						<td>${article.body }</td>
 					</tr>
 					<tr>
-						<th>반응 합</th>
-						<td>${article.extra__sumReactionPoint }</td>
-					</tr>
-					<tr>
-						<th>좋아요 합</th>
+						<th>추천</th>
 						<td>
-							<span class="article-detail__reactionPoint">${article.extra__goodReactionPoint }</span>
+							<span>좋아요 : ${article.extra__goodReactionPoint }</span>
+							<c:if test="${actorCanMakeReaction}">
+								<span>
+									<button>👍</button>
+								</span>
+								<span>
+									<button>👎</button>
+								</span>
+							</c:if>
 						</td>
 					</tr>
-					<tr>
-						<th>싫어요 합</th>
-						<td>${article.extra__badReactionPoint }</td>
-					</tr>
-					<button class="RPbtn" onclick="ArticleDetail__increaseReactionPoint();">좋아요</button>
 				</tbody>
 			</table>
 		</div>

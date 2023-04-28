@@ -55,7 +55,10 @@ public class UsrArticleController {
 		
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 		
-		model.addAttribute(article);
+		boolean actorCanMakeReaction = articleService.actorCanMakeReaction(rq.getLoginedMemberId(), id);
+		
+		model.addAttribute("actorCanMakeReaction", actorCanMakeReaction);
+		model.addAttribute("article", article);
 		
 		return "usr/article/detail";
 	}

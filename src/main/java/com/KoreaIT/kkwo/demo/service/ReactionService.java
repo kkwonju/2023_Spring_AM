@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.KoreaIT.kkwo.demo.repository.ReactionRepository;
+import com.KoreaIT.kkwo.demo.vo.ReactionPoint;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 
 @Service
@@ -29,7 +30,7 @@ public class ReactionService {
 		return ResultData.from("S-1", "반응 삭제 성공", "affectRowRd", affectRowCount);
 	}
 
-	public Object getReactionPoint(int relId) {
+	public ReactionPoint getReactionPoint(int relId) {
 		return reactionRepository.getReactionPoint(relId);
 	}
 }
