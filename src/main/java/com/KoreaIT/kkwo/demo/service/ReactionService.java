@@ -12,6 +12,10 @@ public class ReactionService {
 	@Autowired
 	private ReactionRepository reactionRepository;
 
+	public boolean actorCanMakeReaction(int actorId, String relTypeCode, int relId) {
+		return reactionRepository.getSumReactionPointByMemberId(actorId, relTypeCode, relId) == 0;
+	}
+	
 	public ResultData increaseReactionPoint(int memberId, int relId) {
 		int affectRowCount = reactionRepository.increaseReactionPoint(memberId, relId);
 
