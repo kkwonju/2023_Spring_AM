@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.KoreaIT.kkwo.demo.service.ArticleService;
 import com.KoreaIT.kkwo.demo.service.BoardService;
-import com.KoreaIT.kkwo.demo.service.ReactionService;
+import com.KoreaIT.kkwo.demo.service.ReactionPointService;
 import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.Article;
 import com.KoreaIT.kkwo.demo.vo.Board;
@@ -27,8 +27,7 @@ public class UsrArticleController {
 	@Autowired
 	private Rq rq;
 	@Autowired
-	private ReactionService reactionService;
-	
+	private ReactionPointService reactionPointService;
 
 	@RequestMapping("/usr/article/write")
 	public String showWrite() {
@@ -56,31 +55,45 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(Model model, int id) {
-		
+
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
-		
-		boolean actorCanMakeReaction = reactionService.actorCanMakeReaction(rq.getLoginedMemberId(), "article", id);
-		
+
+		ResultData actorCanMakeReactionRd = reactionPointService.actorCanMakeReaction(rq.getLoginedMemberId(),
+				"article", id);
+
 		model.addAttribute("article", article);
-		model.addAttribute("actorCanMakeReaction", actorCanMakeReaction);
-		
+		model.addAttribute("actorCanMakeReactionRd", actorCanMakeReactionRd);
+		model.addAttribute("actorCanMakeReaction", actorCanMakeReactionRd.isSuccess());
+
+		if (actorCanMakeReactionRd.getResultCode().equals("F-2")) {
+			int sumReactionPointByMemberId = (int) actorCanMakeReactionRd.getData1();
+
+			if (sumReactionPointByMemberId > 0) {
+				model.addAttribute("actorCanCancelGoodReaction", true);
+			} else {
+				model.addAttribute("actorCanCancelBadReaction", true);
+			}
+		}
+
+		model.addAttribute("article", article);
+
 		return "usr/article/detail";
 	}
-	
+
 	@RequestMapping("/usr/article/increaseHitCountRd")
 	@ResponseBody
 	public ResultData doIncreaseHitCountRd(Model model, int id) {
-		
+
 		ResultData increaseHitCountRd = articleService.increaseHitCount(id);
-		
-		if(increaseHitCountRd.isFail()) {
+
+		if (increaseHitCountRd.isFail()) {
 			return increaseHitCountRd;
 		}
 
 		ResultData rd = ResultData.newData(increaseHitCountRd, "hitCount", articleService.getArticleHitCount(id));
-		
+
 		rd.setData2("id", id);
-		
+
 		return rd;
 	}
 
@@ -101,7 +114,8 @@ public class UsrArticleController {
 		int itemsInAPage = 10;
 		int totalPage = (int) Math.ceil((double) articlesCount / itemsInAPage);
 
-		List<Article> articles = articleService.getForPrintArticles(page, itemsInAPage, articlesCount, boardId, searchKeywordTypeCode, searchKeyword);
+		List<Article> articles = articleService.getForPrintArticles(page, itemsInAPage, articlesCount, boardId,
+				searchKeywordTypeCode, searchKeyword);
 
 		model.addAttribute("page", page);
 		model.addAttribute("totalPage", totalPage);

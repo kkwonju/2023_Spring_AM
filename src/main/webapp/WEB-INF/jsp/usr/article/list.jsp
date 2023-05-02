@@ -11,10 +11,13 @@
 			<div>${articlesCount }</div>
 			<table>
 				<colgroup>
-					<col width="140" />
+					<col width="100" />
 					<col width="200" />
-					<col />
-					<col width="140" />
+					<col width="500" />
+					<col width="100" />
+					<col width="100" />
+					<col width="100" />
+					<col width="100" />
 				</colgroup>
 				<thead>
 					<tr>
