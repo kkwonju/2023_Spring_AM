@@ -46,19 +46,19 @@ html>body {
 	text-align: center;
 }
 
-.btn-text-link {
-	display: inline-block;
-	padding: 8px;
-	background-color: black;
-	color: white;
-	border-radius: 5px;
-	transition: .3s;
-	margin-top: 2px;
-}
+/* .btn-text-link { */
+/* 	display: inline-block; */
+/* 	padding: 8px; */
+/* 	background-color: black; */
+/* 	color: white; */
+/* 	border-radius: 5px; */
+/* 	transition: .3s; */
+/* 	margin-top: 2px; */
+/* } */
 
-.btn-text-link:hover {
-	scale: 1.1;
-}
+/* .btn-text-link:hover { */
+/* 	scale: 1.1; */
+/* } */
 
 header>div>ul>li>ul {
 	display: none;

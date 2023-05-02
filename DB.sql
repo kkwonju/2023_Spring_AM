@@ -209,7 +209,81 @@ relTypeCode = 'article',
 relId = 1,
 `point` = 1;
 
-##################################
+ALTER TABLE article ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL;
+ALTER TABLE article ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL;
+
+UPDATE article AS A
+INNER JOIN (
+    SELECT
+    RP.relTypeCode, RP.relId,
+    SUM(IF(RP.point > 0, RP.point, 0)) AS goodReactionPoint,
+    SUM(IF(RP.point < 0, RP.point * -1, 0)) AS badReactionPoint
+    FROM reactionPoint AS RP 
+    GROUP BY RP.relTypeCode, RP.relId
+) AS RP_SUM
+ON A.id = RP_SUM.relId
+SET A.goodReactionPoint = RP_SUM.goodReactionPoint,
+A.badReactionPoint = RP_SUM.badReactionPoint;
+
+# 댓글 테이블 생성
+CREATE TABLE reply(
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    memberId INT(10) UNSIGNED NOT NULL,
+    relTypeCode CHAR(50) NOT NULL COMMENT '관련 데이터 타입 코드',
+    relId INT(10) NOT NULL COMMENT '관련 데이터 번호',
+    `body` TEXT NOT NULL
+);
+
+# reply 테스트 데이터
+# 2번 회원이 2번 글에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 2,
+`body` = '댓글 1';
+
+# 2번 회원이 2번 글에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 2,
+`body` = '댓글 2';
+
+# 3번 회원이 2번 글에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 2,
+`body` = '댓글 3';
+
+# 3번 회원이 3번 글에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 3,
+`body` = '댓글 4';
+
+#################################
+
+DESC article;
+
+SELECT * FROM article;
+SELECT * FROM `member`;
+SELECT * FROM board;
+SELECT * FROM reactionPoint;
+SELECT * FROM reply;
+
+SELECT LAST_INSERT_ID();
 
 # 게시물 갯수 늘리기
 INSERT INTO article
@@ -217,9 +291,6 @@ INSERT INTO article
     regDate, updateDate, memberId, boardId, title, `body`
 )
 SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 2) + 2, CONCAT('제목', RAND()), CONCAT('내용', RAND())
-
-
-###########################
 
 # left join
 SELECT A.*, M.nickname, RP.point
@@ -251,8 +322,8 @@ ORDER BY id DESC;
 # join 버전
 SELECT A.*,
 IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
-IFNULL(SUM(IF(RP.point > 0,RP.point,0)),0) AS extra__goodReactionPoint,
-IFNULL(SUM(IF(RP.point < 0,RP.point,0)),0) AS extra__badReactionPoint,
+IFNULL(COUNT(IF(RP.point > 0,RP.point,0)),0) AS extra__goodReactionPoint,
+IFNULL(COUNT(IF(RP.point < 0,RP.point,0)),0) AS extra__badReactionPoint,
 M.nickname
 FROM article AS A
 INNER JOIN `member` AS M 
@@ -263,11 +334,4 @@ GROUP BY A.id
 ORDER BY A.id DESC;
 
 ###################################
-DESC article;
 
-SELECT * FROM article;
-SELECT * FROM `member`;
-SELECT * FROM board;
-SELECT * FROM reactionPoint;
-
-SELECT LAST_INSERT_ID();

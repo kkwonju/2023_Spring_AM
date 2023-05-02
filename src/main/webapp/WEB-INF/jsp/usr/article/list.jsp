@@ -71,7 +71,6 @@
 		</c:forEach>
 		<c:if test="${page < totalPage}">
 			<a href="${baseUri}&page=${totalPage}"> >> </a>
-
 		</c:if>
 	</div>
 </section>

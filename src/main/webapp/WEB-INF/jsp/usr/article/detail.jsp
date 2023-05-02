@@ -89,12 +89,12 @@
 												<span>&nbsp;</span>
 												<a
 													href="/usr/reactionPoint/doCancelGoodReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.encodedCurrentUri}"
-													class="btn btn-xs">좋아요 👍</a>
+													class="my_btn">좋아요 👍</a>
 											</span>
 											<span>
 												<span>&nbsp;</span>
 												<a onclick="alert(this.title); return false;"
-													title="좋아요를 먼저 취소해" class="btn btn-xs">싫어요 👎</a>
+													title="좋아요를 먼저 취소해" class="my_btn">싫어요 👎</a>
 											</span>
 										</div>
 									</c:when>
@@ -103,13 +103,13 @@
 											<span>
 												<span>&nbsp;</span>
 												<a onclick="alert(this.title); return false;"
-													title="싫어요를 먼저 취소해" class="btn btn-xs">좋아요 👍</a>
+													title="싫어요를 먼저 취소해" class="my_btn">좋아요 👍</a>
 											</span>
 											<span>
 												<span>&nbsp;</span>
 												<a
 													href="/usr/reactionPoint/doCancelBadReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.encodedCurrentUri}"
-													class="btn btn-xs">싫어요 👎</a>
+													class="my_btn">싫어요 👎</a>
 											</span>
 										</div>
 									</c:when>
@@ -119,13 +119,13 @@
 												<span>&nbsp;</span>
 												<a
 													href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.encodedCurrentUri}"
-													class="btn btn-xs">좋아요 👍</a>
+													class="my_btn">좋아요 👍</a>
 											</span>
 											<span>
 												<span>&nbsp;</span>
 												<a
 													href="/usr/reactionPoint/doBadReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.encodedCurrentUri}"
-													class="btn btn-xs">싫어요 👎</a>
+													class="my_btn">싫어요 👎</a>
 											</span>
 										</div>
 
@@ -138,13 +138,13 @@
 			</table>
 		</div>
 		<div>
-			<button class="btn-text-link" type="button"
+			<button class="my_btn" type="button"
 				onclick="location.replace('../article/list')">뒤로가기</button>
 			<c:if test="${article.actorCanModify}">
-				<a class="btn-text-link" href="../article/modify?id=${article.id }">수정</a>
+				<a class="my_btn" href="../article/modify?id=${article.id }">수정</a>
 			</c:if>
 			<c:if test="${article.actorCanDelete}">
-				<a class="btn-text-link" href="../article/delete?id=${article.id }"
+				<a class="my_btn" href="../article/delete?id=${article.id }"
 					onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
 			</c:if>
 		</div>
