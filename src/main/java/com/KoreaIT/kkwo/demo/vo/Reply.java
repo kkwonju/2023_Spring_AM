@@ -15,4 +15,12 @@ public class Reply {
 	private int memberId;
 	private String relTypeCode;
 	private int relId;
+	private int goodReactionPoint;
+	private int badReactionPoint;
+	
+	private String extra__writer;
+
+	private boolean actorCanDelete;
+	private boolean actorCanModify;
+	
 }

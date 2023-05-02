@@ -28,6 +28,7 @@
 						<th>조회수</th>
 						<th>좋아요</th>
 						<th>싫어요</th>
+						<th>댓글</th>
 					</tr>
 				</thead>
 				<tbody>

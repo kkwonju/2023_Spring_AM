@@ -68,11 +68,12 @@ header>div>ul>li>ul {
 
 header>div>ul>li:hover>ul {
 	display: block;
-	background-color: #03A696;
+	background-color: black;
 }
 
 header {
-	background-color: #03A696;
+	background-color: black;
+	color:white;
 }
 
 select {
@@ -86,11 +87,6 @@ select {
 	margin-right: auto;
 }
 
-/* 커스텀 */
-table {
-	width: 100%;
-}
-
 .red {
 	color: red;
 }
@@ -99,11 +95,27 @@ table {
 	background-color: red;
 }
 
+.bd-red {
+	border: 1px solid red;
+}
+
+.flex {
+	display: flex;
+}
+
+.jc-f-e {
+	justify-content: flex-end;
+}
+
+/* 커스텀 */
+table {
+	width: 100%;
+}
+
 .con {
 	width: 1024px;
 	margin-right: auto;
 	margin-left: auto;
-	
 }
 
 .searchForm {
@@ -148,9 +160,6 @@ textarea {
 	scale: 1.1;
 }
 
-.bd-red {
-	border: 1px solid red;
-}
 
 .my_btn {
 	display: inline-block;

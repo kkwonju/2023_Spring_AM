@@ -34,19 +34,19 @@
 
 <script type="text/javascript">
 	let ReplyWrite__submitFormDone = false;
-	
+
 	function ReplyWrite__submitForm(form) {
-		if (ReplyWrite__submitFormDone){
+		if (ReplyWrite__submitFormDone) {
 			return;
 		}
 		form.body.value = form.body.value.trim();
-		
-		if(form.body.value.length < 3){
+
+		if (form.body.value.length < 3) {
 			alert('2글자 이상 입력');
 			form.body.focus();
 			return;
 		}
-		
+
 		ReplyWrite__submitFormDone = true;
 		form.submit();
 	}
@@ -54,6 +54,17 @@
 
 <section class="mt-8 text-xl">
 	<div class="container mx-auto px-3">
+		<div class="flex jc-f-e">
+			<button class="my_btn" type="button"
+				onclick="location.replace('../article/list')">뒤로가기</button>
+			<c:if test="${article.actorCanModify}">
+				<a class="my_btn" href="../article/modify?id=${article.id }">수정</a>
+			</c:if>
+			<c:if test="${article.actorCanDelete}">
+				<a class="my_btn" href="../article/delete?id=${article.id }"
+					onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
+			</c:if>
+		</div>
 		<div class="table-box-type-1">
 			<table border="1">
 				<colgroup>
@@ -157,29 +168,19 @@
 				</tbody>
 			</table>
 		</div>
-		<div>
-			<button class="my_btn" type="button"
-				onclick="location.replace('../article/list')">뒤로가기</button>
-			<c:if test="${article.actorCanModify}">
-				<a class="my_btn" href="../article/modify?id=${article.id }">수정</a>
-			</c:if>
-			<c:if test="${article.actorCanDelete}">
-				<a class="my_btn" href="../article/delete?id=${article.id }"
-					onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
-			</c:if>
-		</div>
 	</div>
 </section>
 
 <!-- 댓글 -->
-<section class="mt-8 text-xl">
+<section class="text-xl">
 	<div class="container mx-auto px-3">
 		<div class="table-box-type-1">
 			<c:if test="${rq.logined }">
-				<form action="../reply/doWrite" method="POST" onsubmit="ReplyWrite__submitForm(this); return false;">
+				<form action="../reply/doWrite" method="POST"
+					onsubmit="ReplyWrite__submitForm(this); return false;">
 					<table border="1">
-						<input type="hidden" name="relTypeCode" value="article"/>
-						<input type="hidden" name="relId" value="${article.id}"/>
+						<input type="hidden" name="relTypeCode" value="article" />
+						<input type="hidden" name="relId" value="${article.id}" />
 						<colgroup>
 							<col width="500" />
 							<col width="400" />
@@ -206,8 +207,9 @@
 	</div>
 </section>
 <section>
-	<div class="container mx-auto px-3">
+	<div class="container mx-auto px-3 ">
 		<div class="table-box-type-1">
+		<div>reply : ${replyCount }개</div>
 			<table>
 				<colgroup>
 					<col width="100" />
@@ -224,12 +226,12 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="reply" items="${replys}">
+					<c:forEach var="reply" items="${replies}">
 						<tr>
 							<td>${reply.id }</td>
 							<td>${reply.regDate.substring(2, 16) }</td>
 							<td>${reply.body}</td>
-							<td>${reply.memberId }</td>
+							<td>${reply.extra__writer }</td>
 						</tr>
 					</c:forEach>
 				</tbody>

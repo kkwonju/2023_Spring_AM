@@ -16,11 +16,11 @@ public class UsrReplyController {
 	private Rq rq;
 	@Autowired
 	private ReplyService replyService;
-	
+
 	public UsrReplyController(ReplyService replyService) {
 		this.replyService = replyService;
 	}
-	
+
 	@RequestMapping("/usr/reply/doWrite")
 	@ResponseBody
 	public String doWrite(String relTypeCode, int relId, String body, String replaceUri) {
@@ -28,11 +28,11 @@ public class UsrReplyController {
 		if (Ut.empty(relTypeCode)) {
 			return Ut.jsHistoryBack("F-2", "relTypeCode을(를) 입력해주세요");
 		}
-		
+
 		if (Ut.empty(relId)) {
 			return Ut.jsHistoryBack("F-2", "relId을(를) 입력해주세요");
 		}
-		
+
 		if (Ut.empty(body)) {
 			return Ut.jsHistoryBack("F-2", "내용을 입력해주세요");
 		}
@@ -40,8 +40,8 @@ public class UsrReplyController {
 		ResultData writeReplyRd = replyService.writeReply(relTypeCode, relId, body, rq.getLoginedMemberId());
 
 		int id = (int) writeReplyRd.getData1();
-		
-		if(Ut.empty(replaceUri)) {
+
+		if (Ut.empty(replaceUri)) {
 			replaceUri = Ut.f("../article/detail?id=%d", relId);
 		}
 

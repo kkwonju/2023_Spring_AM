@@ -273,6 +273,10 @@ relTypeCode = 'article',
 relId = 3,
 `body` = '댓글 4';
 
+# 댓글 테이블의 추천 관련 컬럼 추가
+ALTER TABLE reply ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE reply ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
+
 #################################
 
 DESC article;

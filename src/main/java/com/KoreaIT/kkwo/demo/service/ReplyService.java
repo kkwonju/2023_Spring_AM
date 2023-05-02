@@ -19,8 +19,8 @@ public class ReplyService {
 		this.replyRepository = replyRepository;
 	}
 	
-	public List<Reply> getForPrintReplys(int relId) {
-		return replyRepository.getForPrintReplys(relId);
+	public List<Reply> getForPrintReplies(int actorId , String relTypeCode, int relId) {
+		return replyRepository.getForPrintReplies(actorId, relTypeCode, relId);
 	}
 
 	public ResultData writeReply(String relTypeCode, int relId, String body, int actorId) {

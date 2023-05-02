@@ -61,13 +61,14 @@ public class UsrArticleController {
 	public String showDetail(Model model, int id) {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
-		List<Reply> replys = replyService.getForPrintReplys(id);
-
+		List<Reply> replies = replyService.getForPrintReplies(rq.getLoginedMemberId(), "article", id);
+		int replyCount = replies.size();
 		ResultData actorCanMakeReactionRd = reactionPointService.actorCanMakeReaction(rq.getLoginedMemberId(),
 				"article", id);
 
 		model.addAttribute("article", article);
-		model.addAttribute("replys", replys);
+		model.addAttribute("replies", replies);
+		model.addAttribute("replyCount", replyCount);
 		model.addAttribute("actorCanMakeReactionRd", actorCanMakeReactionRd);
 		model.addAttribute("actorCanMakeReaction", actorCanMakeReactionRd.isSuccess());
 
@@ -117,7 +118,7 @@ public class UsrArticleController {
 
 		int itemsInAPage = 10;
 		int totalPage = (int) Math.ceil((double) articlesCount / itemsInAPage);
-
+		
 		List<Article> articles = articleService.getForPrintArticles(page, itemsInAPage, articlesCount, boardId,
 				searchKeywordTypeCode, searchKeyword);
 

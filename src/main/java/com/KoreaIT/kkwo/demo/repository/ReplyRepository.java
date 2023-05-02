@@ -13,12 +13,15 @@ public interface ReplyRepository {
 
 	@Select("""
 			<script>
-				SELECT *
-				FROM reply
-				WHERE relId = #{relId}
+				SELECT R.*, M.nickname AS extra__writer
+				FROM reply AS R
+				INNER JOIN `member` AS M
+				ON R.memberId = M.id
+				WHERE R.relId = #{relId}
+				AND R.relTypeCode = #{relTypeCode}
 			</script>
 			""")
-	public List<Reply> getForPrintReplys(int relId);
+	public List<Reply> getForPrintReplies(int actorId, String relTypeCode, int relId);
 
 	@Insert("""
 			<script>
