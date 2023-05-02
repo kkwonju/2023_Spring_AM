@@ -150,4 +150,41 @@
 		</div>
 	</div>
 </section>
+
+<!-- 댓글 -->
+<section class="mt-8 text-xl">
+	<div class="container mx-auto px-3">
+		<div class="table-box-type-1">
+			<c:if test="${rq.logined }">
+				<form action="../reply/doWrite" method="POST">
+					<table border="1">
+						<input type="hidden" name="relTypeCode" value="article"/>
+						<input type="hidden" name="relId" value="${article.id}"/>
+						<colgroup>
+							<col width="200" />
+							<col width="200" />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>댓글</th>
+								<td>
+									<textarea name="body"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<th></th>
+								<td>
+									<button type="submit">등록</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+			</c:if>
+			<c:if test="${rq.notLogined}">
+				<a href="/usr/member/login" class="my_btn">로그인</a> 후 이용
+			</c:if>
+		</div>
+	</div>
+</section>
 <%@ include file="../common/foot.jspf"%>

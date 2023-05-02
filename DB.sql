@@ -150,7 +150,7 @@ UPDATE article
 SET boardId = 3
 WHERE id = 3;
 
-ALTER TABLE article ADD COLUMN hitCount INT(10) UNSIGNED NOT NULL;
+ALTER TABLE article ADD COLUMN hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
 # reactionPoint 테이블 생성
 CREATE TABLE reactionPoint(
@@ -209,8 +209,8 @@ relTypeCode = 'article',
 relId = 1,
 `point` = 1;
 
-ALTER TABLE article ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL;
-ALTER TABLE article ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL;
+ALTER TABLE article ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE article ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
 UPDATE article AS A
 INNER JOIN (

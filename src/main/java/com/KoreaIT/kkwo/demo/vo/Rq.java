@@ -116,5 +116,8 @@ public class Rq {
 	// 삭제 x, BeforeActionInterceptor에서 강제 호출
 	public void initOnBeforeActionInterceptor() {
 	}
-
+	
+	public boolean isNotLogined() {
+		return !isLogined;
+	}
 }
