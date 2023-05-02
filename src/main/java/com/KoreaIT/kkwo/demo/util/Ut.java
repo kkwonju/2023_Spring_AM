@@ -15,6 +15,10 @@ public class Ut {
 		if (obj == null) {
 			return true;
 		}
+		
+		if (obj instanceof Integer) {
+			return (int) obj == 0;
+		}
 
 		if (obj instanceof String == false) {
 			return true;

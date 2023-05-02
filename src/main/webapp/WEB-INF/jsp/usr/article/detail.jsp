@@ -32,6 +32,26 @@
 	})
 </script>
 
+<script type="text/javascript">
+	let ReplyWrite__submitFormDone = false;
+	
+	function ReplyWrite__submitForm(form) {
+		if (ReplyWrite__submitFormDone){
+			return;
+		}
+		form.body.value = form.body.value.trim();
+		
+		if(form.body.value.length < 3){
+			alert('2글자 이상 입력');
+			form.body.focus();
+			return;
+		}
+		
+		ReplyWrite__submitFormDone = true;
+		form.submit();
+	}
+</script>
+
 <section class="mt-8 text-xl">
 	<div class="container mx-auto px-3">
 		<div class="table-box-type-1">
@@ -156,23 +176,21 @@
 	<div class="container mx-auto px-3">
 		<div class="table-box-type-1">
 			<c:if test="${rq.logined }">
-				<form action="../reply/doWrite" method="POST">
+				<form action="../reply/doWrite" method="POST" onsubmit="ReplyWrite__submitForm(this); return false;">
 					<table border="1">
 						<input type="hidden" name="relTypeCode" value="article"/>
 						<input type="hidden" name="relId" value="${article.id}"/>
 						<colgroup>
-							<col width="200" />
-							<col width="200" />
+							<col width="500" />
+							<col width="400" />
+							<col width="100" />
 						</colgroup>
 						<tbody>
 							<tr>
 								<th>댓글</th>
 								<td>
-									<textarea name="body"></textarea>
+									<textarea name="body" style="resize: none"></textarea>
 								</td>
-							</tr>
-							<tr>
-								<th></th>
 								<td>
 									<button type="submit">등록</button>
 								</td>
@@ -184,6 +202,38 @@
 			<c:if test="${rq.notLogined}">
 				<a href="/usr/member/login" class="my_btn">로그인</a> 후 이용
 			</c:if>
+		</div>
+	</div>
+</section>
+<section>
+	<div class="container mx-auto px-3">
+		<div class="table-box-type-1">
+			<table>
+				<colgroup>
+					<col width="100" />
+					<col width="200" />
+					<col width="500" />
+					<col width="100" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>날짜</th>
+						<th>내용</th>
+						<th>작성자</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="reply" items="${replys}">
+						<tr>
+							<td>${reply.id }</td>
+							<td>${reply.regDate.substring(2, 16) }</td>
+							<td>${reply.body}</td>
+							<td>${reply.memberId }</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </section>

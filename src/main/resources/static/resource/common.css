@@ -103,10 +103,17 @@ table {
 	width: 1024px;
 	margin-right: auto;
 	margin-left: auto;
+	
 }
 
 .searchForm {
 	display: flex;
+}
+
+textarea {
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .utilBar {

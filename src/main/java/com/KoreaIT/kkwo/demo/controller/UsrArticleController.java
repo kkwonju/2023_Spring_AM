@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.KoreaIT.kkwo.demo.service.ArticleService;
 import com.KoreaIT.kkwo.demo.service.BoardService;
 import com.KoreaIT.kkwo.demo.service.ReactionPointService;
+import com.KoreaIT.kkwo.demo.service.ReplyService;
 import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.Article;
 import com.KoreaIT.kkwo.demo.vo.Board;
+import com.KoreaIT.kkwo.demo.vo.Reply;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 import com.KoreaIT.kkwo.demo.vo.Rq;
 
@@ -28,6 +30,8 @@ public class UsrArticleController {
 	private Rq rq;
 	@Autowired
 	private ReactionPointService reactionPointService;
+	@Autowired
+	private ReplyService replyService;
 
 	@RequestMapping("/usr/article/write")
 	public String showWrite() {
@@ -57,11 +61,13 @@ public class UsrArticleController {
 	public String showDetail(Model model, int id) {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+		List<Reply> replys = replyService.getForPrintReplys(id);
 
 		ResultData actorCanMakeReactionRd = reactionPointService.actorCanMakeReaction(rq.getLoginedMemberId(),
 				"article", id);
 
 		model.addAttribute("article", article);
+		model.addAttribute("replys", replys);
 		model.addAttribute("actorCanMakeReactionRd", actorCanMakeReactionRd);
 		model.addAttribute("actorCanMakeReaction", actorCanMakeReactionRd.isSuccess());
 
@@ -74,8 +80,6 @@ public class UsrArticleController {
 				model.addAttribute("actorCanCancelBadReaction", true);
 			}
 		}
-
-		model.addAttribute("article", article);
 
 		return "usr/article/detail";
 	}
