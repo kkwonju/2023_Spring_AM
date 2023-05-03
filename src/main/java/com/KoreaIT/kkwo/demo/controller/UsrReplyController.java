@@ -1,5 +1,7 @@
 package com.KoreaIT.kkwo.demo.controller;
 
+import javax.swing.UIClientPropertyKey;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.KoreaIT.kkwo.demo.service.ReplyService;
 import com.KoreaIT.kkwo.demo.util.Ut;
+import com.KoreaIT.kkwo.demo.vo.Reply;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 import com.KoreaIT.kkwo.demo.vo.Rq;
 
@@ -48,16 +51,30 @@ public class UsrReplyController {
 		return Ut.jsReplace("S-1", Ut.f("%d번 댓글이 생성되었습니다", id), replaceUri);
 	}
 	
-//	@RequestMapping("/usr/reply/showModifyForm")
-//	@ResponseBody
-//	public String showModifyForm() {
-//		return
-//	}
-//	
-//	@RequestMapping("/usr/reply/doModify")
-//	@ResponseBody
-//	public String doModify(String relTypeCode, int relId, String body) {
-//		return
-//	}
-	
+	@RequestMapping("/usr/reply/delete")
+	@ResponseBody
+	public String doDelete(int id, String replaceUri) {
+
+		Reply reply = replyService.getReply(id);
+
+		if (reply == null) {
+			return Ut.jsHistoryBack("F-4", Ut.f("%d번 댓글은 존재하지 않습니다", id));
+		}
+
+		if (reply.getMemberId() != rq.getLoginedMemberId()) {
+			return Ut.jsHistoryBack("F-4", Ut.f("%d번 댓글에 대한 권한이 없습니다", id));
+		}
+
+		ResultData deleteReplyRd = replyService.deleteReply(id);
+		
+		if(Ut.empty(replaceUri)) {
+			switch(reply.getRelTypeCode()) {
+			case "article":
+				replaceUri = Ut.f("../article/detail?id=%d", reply.getRelId());
+				break;
+			}
+		}
+		
+		return Ut.jsReplace("S-1", Ut.f("%d번 댓글을 삭제했습니다", id), "../article/list?boardId=1");
+	}
 }

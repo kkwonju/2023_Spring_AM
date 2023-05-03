@@ -2,6 +2,7 @@ package com.KoreaIT.kkwo.demo.repository;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -38,4 +39,21 @@ public interface ReplyRepository {
 
 	@Select("SELECT LAST_INSERT_ID()")
 	public int getLastInsertId();
+
+	@Select("""
+			<script>
+				SELECT *
+				FROM reply
+				WHERE id = #{id}
+			</script>
+			""")
+	public Reply getReply(int id);
+
+	@Delete("""
+			<script>
+				DELETE FROM reply
+				WHERE id = #{id}
+			</script>
+			""")
+	public void deleteReply(int id);
 }
