@@ -84,6 +84,12 @@
 					</c:when>
 					<c:otherwise>
 						<li class="hover:underline">
+							<a class="h-full px-3 flex items-center" 
+							   href="/usr/member/myPage">
+								<span>MY PAGE</span>
+							</a>
+						</li>
+						<li class="hover:underline">
 							<a class="h-full px-3 flex items-center"
 								href="/usr/member/logout">
 								<span>LOGOUT</span>
