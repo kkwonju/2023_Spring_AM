@@ -277,6 +277,17 @@ relId = 3,
 ALTER TABLE reply ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE reply ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
+ALTER TABLE `Spring_AM`.`reply` ADD KEY `relTypeCodeId` (`relTypeCode`, `relId`);
+
+EXPLAIN SELECT R.*, M.nickname AS extra__writer
+FROM reply AS R
+LEFT JOIN `member` AS M
+ON R.memberId = M.id
+WHERE R.relTypeCode = 'article'
+AND R.relId = 1
+ORDER BY R.id DESC;
+
+#################################
 #################################
 
 DESC article;
@@ -326,8 +337,8 @@ ORDER BY id DESC;
 # join 버전
 SELECT A.*,
 IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
-IFNULL(COUNT(IF(RP.point > 0,RP.point,0)),0) AS extra__goodReactionPoint,
-IFNULL(COUNT(IF(RP.point < 0,RP.point,0)),0) AS extra__badReactionPoint,
+IFNULL(count(IF(RP.point > 0,RP.point,0)),0) AS extra__goodReactionPoint,
+IFNULL(count(IF(RP.point < 0,RP.point,0)),0) AS extra__badReactionPoint,
 M.nickname
 FROM article AS A
 INNER JOIN `member` AS M 
