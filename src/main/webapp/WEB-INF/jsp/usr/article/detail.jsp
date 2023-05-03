@@ -32,6 +32,16 @@
 	})
 </script>
 
+<script>
+	$('.showModifyForm').click(() => {
+		
+	}))
+
+	function Reply_showModifyForm(){
+		
+	}
+</script>
+
 <script type="text/javascript">
 	let ReplyWrite__submitFormDone = false;
 
@@ -212,10 +222,12 @@
 		<table class="reply_table">
 			<colgroup>
 				<col width="70" />
-				<col width="100" />
+				<col width="140" />
 				<col width="100" />
 				<col width="50" />
 				<col width="140" />
+				<col width="50" />
+				<col width="50" />
 			</colgroup>
 			<thead>
 				<tr>
@@ -224,9 +236,10 @@
 					<th>작성자</th>
 					<th>추천</th>
 					<th>내용</th>
+					<th>수정</th>
+					<th>삭제</th>
 				</tr>
 			</thead>
-
 			<tbody>
 				<c:forEach var="reply" items="${replies }">
 					<tr class="hover">
@@ -237,6 +250,17 @@
 						<td>${reply.extra__writer}</td>
 						<td>${reply.goodReactionPoint}</td>
 						<td align="left">${reply.body}</td>
+						<td>
+							<c:if test="${reply.actorCanModify}">
+								<a class="my_btn" href="../reply/modify?id=${reply.id }">수정</a>
+							</c:if>
+						</td>
+						<td>
+							<c:if test="${reply.actorCanDelete}">
+								<a class="my_btn" href="../reply/delete?id=${reply.id }"
+									onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
+							</c:if>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>

@@ -47,4 +47,17 @@ public class UsrReplyController {
 
 		return Ut.jsReplace("S-1", Ut.f("%d번 댓글이 생성되었습니다", id), replaceUri);
 	}
+	
+//	@RequestMapping("/usr/reply/showModifyForm")
+//	@ResponseBody
+//	public String showModifyForm() {
+//		return
+//	}
+//	
+//	@RequestMapping("/usr/reply/doModify")
+//	@ResponseBody
+//	public String doModify(String relTypeCode, int relId, String body) {
+//		return
+//	}
+	
 }

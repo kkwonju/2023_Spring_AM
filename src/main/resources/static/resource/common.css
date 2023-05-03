@@ -171,7 +171,7 @@ textarea {
 	
 }
 
-.reply_table, .reply_table > *, .reply_table > * > * {
+.reply_table, .reply_table > * {
 	text-align: center;
 	border: 1px solid black;
 }
