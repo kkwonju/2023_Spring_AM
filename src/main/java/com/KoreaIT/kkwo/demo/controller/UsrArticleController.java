@@ -62,13 +62,13 @@ public class UsrArticleController {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 		List<Reply> replies = replyService.getForPrintReplies(rq.getLoginedMemberId(), "article", id);
-		int replyCount = replies.size();
+		int repliesCount = replies.size();
 		ResultData actorCanMakeReactionRd = reactionPointService.actorCanMakeReaction(rq.getLoginedMemberId(),
 				"article", id);
 
 		model.addAttribute("article", article);
 		model.addAttribute("replies", replies);
-		model.addAttribute("replyCount", replyCount);
+		model.addAttribute("repliesCount", repliesCount);
 		model.addAttribute("actorCanMakeReactionRd", actorCanMakeReactionRd);
 		model.addAttribute("actorCanMakeReaction", actorCanMakeReactionRd.isSuccess());
 

@@ -23,4 +23,7 @@ public class Reply {
 	private boolean actorCanDelete;
 	private boolean actorCanModify;
 	
+	public String getForPrintRegDateType1() {
+		return regDate.substring(2, 16).replace(" ", "<br>");
+	}
 }

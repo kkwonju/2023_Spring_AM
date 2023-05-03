@@ -206,37 +206,42 @@
 		</div>
 	</div>
 </section>
-<section>
-	<div class="container mx-auto px-3 ">
-		<div class="table-box-type-1">
-		<div>reply : ${replyCount }개</div>
-			<table>
-				<colgroup>
-					<col width="100" />
-					<col width="200" />
-					<col width="500" />
-					<col width="100" />
-				</colgroup>
-				<thead>
-					<tr>
-						<th>번호</th>
-						<th>날짜</th>
-						<th>내용</th>
-						<th>작성자</th>
+<section class="mt-5">
+	<div class="container mx-auto px-3">
+		<h1 class="text-3xl">댓글 리스트(${repliesCount })</h1>
+		<table class="reply_table">
+			<colgroup>
+				<col width="70" />
+				<col width="100" />
+				<col width="100" />
+				<col width="50" />
+				<col width="140" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>날짜</th>
+					<th>작성자</th>
+					<th>추천</th>
+					<th>내용</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<c:forEach var="reply" items="${replies }">
+					<tr class="hover">
+						<td>
+							<div class="badge">${reply.id}</div>
+						</td>
+						<td>${reply.getForPrintRegDateType1()}</td>
+						<td>${reply.extra__writer}</td>
+						<td>${reply.goodReactionPoint}</td>
+						<td align="left">${reply.body}</td>
 					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="reply" items="${replies}">
-						<tr>
-							<td>${reply.id }</td>
-							<td>${reply.regDate.substring(2, 16) }</td>
-							<td>${reply.body}</td>
-							<td>${reply.extra__writer }</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
+				</c:forEach>
+			</tbody>
+
+		</table>
 	</div>
 </section>
 <%@ include file="../common/foot.jspf"%>
