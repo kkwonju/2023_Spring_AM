@@ -1,14 +1,15 @@
 package com.KoreaIT.kkwo.demo.controller;
 
-import javax.swing.UIClientPropertyKey;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.KoreaIT.kkwo.demo.service.ArticleService;
 import com.KoreaIT.kkwo.demo.service.ReplyService;
 import com.KoreaIT.kkwo.demo.util.Ut;
+import com.KoreaIT.kkwo.demo.vo.Article;
 import com.KoreaIT.kkwo.demo.vo.Reply;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 import com.KoreaIT.kkwo.demo.vo.Rq;
@@ -19,6 +20,8 @@ public class UsrReplyController {
 	private Rq rq;
 	@Autowired
 	private ReplyService replyService;
+	@Autowired
+	private ArticleService articleService;
 
 	public UsrReplyController(ReplyService replyService) {
 		this.replyService = replyService;
@@ -51,6 +54,56 @@ public class UsrReplyController {
 		return Ut.jsReplace("S-1", Ut.f("%d번 댓글이 생성되었습니다", id), replaceUri);
 	}
 	
+	/* 댓글 수정 폼 */
+	@RequestMapping("/usr/reply/modify")
+	public String showModify(Model model, int id) {
+
+		Reply reply = replyService.getForPrintReply(rq.getLoginedMemberId(), id);
+
+		if (reply == null) {
+			return rq.jsHistoryBackOnView(Ut.f("%d번 글은 존재하지 않습니다", id));
+		}
+
+		ResultData actorCanModifyRd = replyService.actorCanModify(rq.getLoginedMemberId(), reply);
+
+		if (actorCanModifyRd.isFail()) {
+			return rq.jsHistoryBackOnView(actorCanModifyRd.getMsg());
+		}
+		
+		Article article = articleService.getArticle(reply.getRelId());
+
+		model.addAttribute("reply", reply);
+		model.addAttribute("article", article);
+		
+		return "usr/reply/modify";
+	}
+
+	/* 댓글 수정 */
+	@RequestMapping("/usr/reply/doModify")
+	@ResponseBody
+	public String doModify(int id, String body, String replaceUri) {
+
+		Reply reply = replyService.getReply(id);
+
+		if (reply == null) {
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 댓글은 존재하지 않습니다", id));
+		}
+
+		ResultData actorCanModifyRd = replyService.actorCanModify(rq.getLoginedMemberId(), reply);
+
+		if (actorCanModifyRd.isFail()) {
+			return Ut.jsHistoryBack("F-2", actorCanModifyRd.getMsg());
+		}
+
+		ResultData replyModifyRd = replyService.modifyReply(id, body);
+		
+		if (Ut.empty(replaceUri)) {
+			replaceUri = Ut.f("../article/detail?id=%d", reply.getRelId());
+		}
+
+		return Ut.jsReplace(replyModifyRd.getResultCode(), replyModifyRd.getMsg(), replaceUri);
+	}
+	
 	@RequestMapping("/usr/reply/delete")
 	@ResponseBody
 	public String doDelete(int id, String replaceUri) {
@@ -75,6 +128,6 @@ public class UsrReplyController {
 			}
 		}
 		
-		return Ut.jsReplace("S-1", Ut.f("%d번 댓글을 삭제했습니다", id), "../article/list?boardId=1");
+		return Ut.jsReplace("S-1", Ut.f("%d번 댓글을 삭제했습니다", id), replaceUri);
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.KoreaIT.kkwo.demo.repository.ReplyRepository;
 import com.KoreaIT.kkwo.demo.util.Ut;
+import com.KoreaIT.kkwo.demo.vo.Article;
 import com.KoreaIT.kkwo.demo.vo.Reply;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 
@@ -67,13 +68,32 @@ public class ReplyService {
 		return ResultData.from("S-1", "수정 가능");
 	}
 
+	/* 댓글 가져오기 */
 	public Reply getReply(int id) {
 		return replyRepository.getReply(id);
 	}
 
+	/* 댓글 삭제 */
 	public ResultData deleteReply(int id) {
 		replyRepository.deleteReply(id);
 		return ResultData.from("S-1", Ut.f("%d번 댓글 삭제", id), "id", id);
+	}
+	
+	/* 출력용 댓글 가져오기 */
+	public Reply getForPrintReply(int actorId, int id) {
+		Reply reply = replyRepository.getForPrintReply(id);
+
+		controlForPrintData(actorId, reply);
+		return reply;
+	}
+	
+	/* 댓글 수정 */
+	public ResultData modifyReply(int id, String body) {
+		replyRepository.modifyReply(id, body);
+
+		Reply reply = getReply(id);
+
+		return ResultData.from("S-1", Ut.f("%d번 댓글을 수정했습니다", id), "Reply", reply);
 	}
 
 }

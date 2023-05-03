@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.KoreaIT.kkwo.demo.vo.Reply;
 
@@ -56,4 +57,27 @@ public interface ReplyRepository {
 			</script>
 			""")
 	public void deleteReply(int id);
+
+	@Select("""
+				SELECT R.*, M.nickname AS extra__writer
+				FROM reply AS R
+				INNER JOIN `member` AS M
+				ON R.memberId = M.id
+				WHERE R.id = #{id}
+			""")
+	Reply getForPrintReply(int id);
+
+	@Update("""
+			<script>
+				UPDATE reply
+				<set>
+					<if test="body != null and body != ''">
+						`body` = #{body},
+					</if>
+					updateDate = NOW()
+				</set>
+				WHERE id = #{id}
+			</script>
+			""")
+	public void modifyReply(int id, String body);
 }

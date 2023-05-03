@@ -3,12 +3,39 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="pageTitle" value="ARTICLE MODIFY" />
 <%@ include file="../common/head.jspf"%>
-<hr />
 
+<script type="text/javascript">
+	let ArticleModify__submitFormDone = false;
+
+	function ArticleModify__submit(form) {
+		if (ArticleModify__submitFormDone) {
+			return;
+		}
+		form.title.value = form.title.value.trim();
+		form.body.value = form.body.value.trim();
+		
+		if (form.title.value.length < 2) {
+			alert('제목 1글자 이상 입력');
+			form.title.focus();
+			return;
+		}
+		
+		if (form.body.value.length < 2) {
+			alert('내용 1글자 이상 입력');
+			form.body.focus();
+			return;
+		}
+
+		ArticleModify__submitFormDone = true;
+		form.submit();
+	}
+</script>
+
+<hr />
 <section class="mt-8 text-xl">
 	<div class="container mx-auto px-3">
 		<div class="table-box-type-1">
-			<form action="../article/doModify" method="POST">
+			<form action="../article/doModify" method="POST" onsubmit="ArticleModify__submit(form); return false;'">
 				<table border="1">
 					<colgroup>
 						<col width="200" />
