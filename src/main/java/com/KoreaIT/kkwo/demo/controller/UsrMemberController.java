@@ -100,10 +100,6 @@ public class UsrMemberController {
 	@ResponseBody
 	public String doLogout() {
 
-		if (!rq.isLogined()) {
-			return Ut.jsHistoryBack("F-0", "이미 로그아웃 상태입니다");
-		}
-
 		rq.logout();
 
 		return Ut.jsReplace("S-1", "로그아웃 되었습니다", "../home/main");
@@ -114,5 +110,15 @@ public class UsrMemberController {
 		Member member = rq.getLoginedMember();
 		model.addAttribute("member", member);
 		return "usr/member/myPage";
+	}
+	
+	@RequestMapping("/usr/member/checkPw")
+	public String showCheckPw(Model model) {
+		return "usr/member/checkPw";
+	}
+	
+	@RequestMapping("/usr/member/modify")
+	public String showMemberModifyForm() {
+		return "usr/member/modify";
 	}
 }
