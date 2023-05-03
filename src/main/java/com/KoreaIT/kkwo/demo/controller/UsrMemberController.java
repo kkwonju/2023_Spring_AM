@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.KoreaIT.kkwo.demo.service.MemberService;
 import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.Member;
+import com.KoreaIT.kkwo.demo.vo.Reply;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 import com.KoreaIT.kkwo.demo.vo.Rq;
 
@@ -117,8 +118,47 @@ public class UsrMemberController {
 		return "usr/member/checkPw";
 	}
 	
-	@RequestMapping("/usr/member/modify")
-	public String showMemberModifyForm() {
+	@RequestMapping("/usr/member/doCheckPw")
+	@ResponseBody
+	public String checkPw(Model model, String loginId, String loginPw) {
+//		if(Ut.empty(replaceUri)) {
+//			replaceUri = "/usr/member/checkPw";
+//		}
+		if(!loginPw.equals(rq.getLoginedMember().getLoginPw())) {
+			return rq.jsHistoryBackOnView("비밀번호가 틀립니다");
+		}
+		Member member = rq.getLoginedMember();
+		model.addAttribute("member", member);
 		return "usr/member/modify";
+	}
+	
+	@RequestMapping("/usr/member/modify")
+	public String showModifyForm() {
+		return "usr/member/modify";
+	}
+	
+	@RequestMapping("/usr/member/doModify")
+	@ResponseBody
+	public String doModify(int id, String loginPw, String name, String nickname, String cellphoneNum, String email, String replaceUri) {
+
+		Member member = memberService.getMemberById(id);
+
+		if (member == null) {
+			return Ut.jsHistoryBack("F-1", Ut.f("해당 회원은 존재하지 않습니다", id));
+		}
+
+		ResultData actorCanModifyRd = memberService.actorCanModify(rq.getLoginedMemberId(), member);
+
+		if (actorCanModifyRd.isFail()) {
+			return Ut.jsHistoryBack("F-2", actorCanModifyRd.getMsg());
+		}
+
+		ResultData memberModifyRd = memberService.modifyMember(id, loginPw, name, nickname, cellphoneNum, email);
+		
+		if (Ut.empty(replaceUri)) {
+			replaceUri = "../member/myPage";
+		}
+
+		return Ut.jsReplace(memberModifyRd.getResultCode(), memberModifyRd.getMsg(), replaceUri);
 	}
 }

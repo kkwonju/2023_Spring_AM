@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script>
 	var historyBack = '${historyBack}' == 'true';
+	var locationReload = '${locationReload}' == 'true'
 	var msg = '${msg}'.trim();
 
 	if (msg) {
@@ -13,9 +14,17 @@
 		history.back();
 	}
 	
-	var replaceUri = '${replaceUri}'.trim();
+	if (locationReload) {
+		location.reload();
+	}
 	
-	if(replaceUri) {
+	if (locationReload) {
+		location.replace();
+	}
+
+	var replaceUri = '${replaceUri}'.trim();
+
+	if (replaceUri) {
 		location.replace(replaceUri);
 	}
 </script>

@@ -3,6 +3,7 @@ package com.KoreaIT.kkwo.demo.repository;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.KoreaIT.kkwo.demo.vo.Member;
 
@@ -27,7 +28,7 @@ public interface MemberRepository {
 
 	@Select("SELECT * FROM `member` WHERE loginId = #{loginId}")
 	public Member getMemberByLoginId(String loginId);
-	
+
 	@Select("""
 			SELECT *
 			FROM `member`
@@ -35,7 +36,21 @@ public interface MemberRepository {
 			AND email = #{email}
 			""")
 	public Member getMemberByNameAndEmail(String name, String email);
-	
+
 	@Select("SELECT LAST_INSERT_ID()")
 	public int getLastInsertId();
+
+	@Update("""
+			<script>
+				UPDATE `member`
+				<set>
+					<if test="body != null and body != ''">
+						`body` = #{body},
+					</if>
+					updateDate = NOW()
+				</set>
+				WHERE id = #{id}
+			</script>
+			""")
+	public void modifyMember(int id, String loginPw, String name, String nickname, String cellphoneNum, String email);
 }

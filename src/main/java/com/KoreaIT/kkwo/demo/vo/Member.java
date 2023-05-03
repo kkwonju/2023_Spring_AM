@@ -20,4 +20,7 @@ public class Member {
 	private String email;
 	private int delStatus;
 	private String delDateTime;
+	
+	private boolean actorCanDelete;
+	private boolean actorCanModify;
 }

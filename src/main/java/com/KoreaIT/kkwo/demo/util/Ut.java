@@ -49,6 +49,22 @@ public class Ut {
 				</script>
 				""", msg);
 	}
+	
+	public static String jsLocationReload(String msg) {
+		if (msg == null) {
+			msg = "";
+		}
+		
+		return Ut.f("""
+				<script>
+					const msg = '%s'.trim();
+					if( msg.length > 0 ){
+						alert(msg);
+					}
+					location.reload();
+				</script>
+				""", msg);
+	}
 
 	/* 접근 시 특정 페이지로 , */
 	public static String jsReplace(String resultCode, String msg, String uri) {

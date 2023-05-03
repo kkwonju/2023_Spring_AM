@@ -66,6 +66,18 @@ public class Rq {
 		return "usr/common/js";
 	}
 
+	public String jsLocationReloadOnView(String msg) {
+		req.setAttribute("msg", msg);
+		req.setAttribute("locationReload", true);
+		return "usr/common/js";
+	}
+	
+	public String jsReplaceOnView(String msg, String replaceUri) {
+		req.setAttribute("msg", msg);
+		req.setAttribute("replaceUri", replaceUri);
+		return "usr/common/js";
+	}
+	
 	public void printHistoryBackJs(String msg) throws IOException {
 		resp.setContentType("text/html; charset=UTF-8;");
 		print(Ut.jsHistoryBack("F-B", msg));

@@ -8,7 +8,7 @@
 	<div class="container mx-auto px-3">
 		<div class="flex jc-f-e">
 <%-- 			<c:if test="${member.actorCanModify}"> --%>
-				<a class="my_btn" href="../member/checkPw">수정</a>
+				<a class="my_btn" href="../member/checkPw=${Ut.getEncodedUri('../member/modify') }">수정</a>
 <%-- 			</c:if> --%>
 		</div>
 		<div class="table-box-type-1">
