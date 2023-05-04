@@ -39,13 +39,25 @@ public interface MemberRepository {
 
 	@Select("SELECT LAST_INSERT_ID()")
 	public int getLastInsertId();
-
+	
 	@Update("""
 			<script>
 				UPDATE `member`
 				<set>
-					<if test="body != null and body != ''">
-						`body` = #{body},
+					<if test="loginPw != null">
+						loginPw = #{loginPw},
+					</if>
+					<if test="name != null">
+						name = #{name},
+					</if>
+					<if test="nickname != null">
+						nickname = #{nickname},
+					</if>
+					<if test="cellphoneNum != null">
+						cellphoneNum = #{cellphoneNum},
+					</if>
+					<if test="email != null">
+						email = #{email},
 					</if>
 					updateDate = NOW()
 				</set>

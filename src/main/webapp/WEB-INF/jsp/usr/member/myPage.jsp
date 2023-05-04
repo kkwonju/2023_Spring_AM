@@ -3,14 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="pageTitle" value="Member My Page" />
 <%@ include file="../common/head.jspf"%>
+<%@ page import="com.KoreaIT.kkwo.demo.util.Ut"%>
 
 <section class="mt-8 text-xl">
 	<div class="container mx-auto px-3">
-		<div class="flex jc-f-e">
-<%-- 			<c:if test="${member.actorCanModify}"> --%>
-				<a class="my_btn" href="../member/checkPw=${Ut.getEncodedUri('../member/modify') }">수정</a>
-<%-- 			</c:if> --%>
-		</div>
 		<div class="table-box-type-1">
 			<table border="1">
 				<colgroup>
@@ -49,6 +45,13 @@
 					<tr>
 						<th>이메일</th>
 						<td>${member.email }</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td>
+							<a class="my_btn"
+								href="../member/checkPw?replaceUri=${Ut.getEncodedUri('../member/modify') }">수정</a>
+						</td>
 					</tr>
 				</tbody>
 			</table>

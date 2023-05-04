@@ -17,13 +17,16 @@ interface는 생성자가 없으므로 여기서 super는 부모의 메서드를
 
 @Component
 public class BeforeActionInterceptor implements HandlerInterceptor {
-	@Autowired
 	private Rq rq;
+	
+	public BeforeActionInterceptor(Rq rq) {
+		this.rq = rq;
+	}
 	
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
 		
-		rq.initOnBeforeActionInterceptor();
+		req.setAttribute("rq", rq);
 		
 		return HandlerInterceptor.super.preHandle(req, resp, handler);
 	}

@@ -105,60 +105,63 @@ public class UsrMemberController {
 
 		return Ut.jsReplace("S-1", "로그아웃 되었습니다", "../home/main");
 	}
-	
+
 	@RequestMapping("/usr/member/myPage")
 	public String showMyPage(Model model) {
 		Member member = rq.getLoginedMember();
 		model.addAttribute("member", member);
 		return "usr/member/myPage";
 	}
-	
+
 	@RequestMapping("/usr/member/checkPw")
 	public String showCheckPw(Model model) {
 		return "usr/member/checkPw";
 	}
-	
+
 	@RequestMapping("/usr/member/doCheckPw")
 	@ResponseBody
-	public String checkPw(Model model, String loginId, String loginPw) {
-//		if(Ut.empty(replaceUri)) {
-//			replaceUri = "/usr/member/checkPw";
-//		}
-		if(!loginPw.equals(rq.getLoginedMember().getLoginPw())) {
-			return rq.jsHistoryBackOnView("비밀번호가 틀립니다");
+	public String checkPw(String loginPw, String replaceUri) {
+
+		if (Ut.empty(loginPw)) {
+			return Ut.jsHistoryBack("F-1", "비밀번호 입력해");
 		}
-		Member member = rq.getLoginedMember();
-		model.addAttribute("member", member);
-		return "usr/member/modify";
+
+		if (!loginPw.equals(rq.getLoginedMember().getLoginPw())) {
+			return Ut.jsHistoryBack("F-1", "비밀번호가 틀립니다");
+		}
+
+		return Ut.jsReplace("S-1", "비밀번호 일치", replaceUri);
 	}
-	
+
 	@RequestMapping("/usr/member/modify")
 	public String showModifyForm() {
 		return "usr/member/modify";
 	}
-	
+
 	@RequestMapping("/usr/member/doModify")
 	@ResponseBody
-	public String doModify(int id, String loginPw, String name, String nickname, String cellphoneNum, String email, String replaceUri) {
+	public String doModify(String loginPw, String name, String nickname, String cellphoneNum, String email) {
 
-		Member member = memberService.getMemberById(id);
-
-		if (member == null) {
-			return Ut.jsHistoryBack("F-1", Ut.f("해당 회원은 존재하지 않습니다", id));
+		if (Ut.empty(loginPw)) {
+			loginPw = null;
+		}
+		if (Ut.empty(name)) {
+			return Ut.jsHistoryBack("F-1", "이름을 입력해주세요");
+		}
+		if (Ut.empty(nickname)) {
+			return Ut.jsHistoryBack("F-1", "닉네임을 입력해주세요");
+		}
+		if (Ut.empty(cellphoneNum)) {
+			return Ut.jsHistoryBack("F-1", "전화번호를 입력해주세요");
+		}
+		if (Ut.empty(email)) {
+			return Ut.jsHistoryBack("F-1", "이메일을 입력해주세요");
 		}
 
-		ResultData actorCanModifyRd = memberService.actorCanModify(rq.getLoginedMemberId(), member);
+		Member member = memberService.getMemberById(rq.getLoginedMemberId());
 
-		if (actorCanModifyRd.isFail()) {
-			return Ut.jsHistoryBack("F-2", actorCanModifyRd.getMsg());
-		}
+		ResultData memberModifyRd = memberService.modifyMember(rq.getLoginedMemberId(), loginPw, name, nickname, cellphoneNum, email);
 
-		ResultData memberModifyRd = memberService.modifyMember(id, loginPw, name, nickname, cellphoneNum, email);
-		
-		if (Ut.empty(replaceUri)) {
-			replaceUri = "../member/myPage";
-		}
-
-		return Ut.jsReplace(memberModifyRd.getResultCode(), memberModifyRd.getMsg(), replaceUri);
+		return Ut.jsReplace(memberModifyRd.getResultCode(), memberModifyRd.getMsg(), "../member/myPage");
 	}
 }

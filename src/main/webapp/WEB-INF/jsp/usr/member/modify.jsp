@@ -1,36 +1,65 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<c:set var="pageTitle" value="ARTICLE MODIFY" />
+<c:set var="pageTitle" value="MEMBER MODIFY" />
 <%@ include file="../common/head.jspf"%>
 
-<script>
+<script type="text/javascript">
 	let MemberModify__submitFormDone = false;
 
-	function MemberModify__submit(form){
-		if(MemberModify__submitFormDone){
+	function MemberModify__submit(form) {
+		if (MemberModify__submitFormDone) {
 			return;
 		}
-		
-		form.loginPw.value = form.loginPW.value.trim();
-		
-// 		필수 입력이 아닌 입력란에 입력이 되었나?
-		if(form.loginPw.value.length > 0){
-			form.checkLoginPw.value = form.checkLoginPw.value.trim();
-			
-			if(form.loginPw.value != form.checkLoginPw.value){
-				alert('새 비밀번호가 일치하지 않습니다');
-				fomr.loginPw.val("");
+		form.loginPw.value = form.loginPw.value.trim();
+
+		if (form.loginPw.value.length > 0) {
+			form.loginPwConfirm.value = form.loginPwConfirm.value.trim();
+
+			if (form.loginPwConfirm.value.length == 0) {
+				alert('비번 확인 써라');
+				form.loginPwConfirm.focus();
+				return;
+
+			}
+
+			if (form.loginPw.value != form.loginPwConfirm.value) {
+				alert('비번 불일치');
 				form.loginPw.focus();
 				return;
 			}
 		}
-		
-		form.submit();
-	}
-	
-</script>
 
+		form.name.value = form.name.value.trim();
+		form.nickname.value = form.nickname.value.trim();
+		form.cellphoneNum.value = form.cellphoneNum.value.trim();
+		form.email.value = form.email.value.trim();
+
+		if (form.name.value.length == 0) {
+			alert('이름 써라');
+			form.name.focus();
+		}
+
+		if (form.nickname.value.length == 0) {
+			alert('nickname 써라');
+			form.nickname.focus();
+		}
+
+		if (form.cellphoneNum.value.length == 0) {
+			alert('cellphoneNum 써라');
+			form.cellphoneNum.focus();
+		}
+
+		if (form.email.value.length == 0) {
+			alert('email 써라');
+			form.email.focus();
+		}
+
+		MemberModify__submitFormDone = true;
+		form.submit();
+
+	}
+</script>
 <hr />
 <section class="mt-8 text-xl">
 	<div class="container mx-auto px-3">
@@ -41,52 +70,56 @@
 						<col width="200" />
 					</colgroup>
 					<tbody>
-
-						<input type="hidden" name="id" value="${member.id }" />
 						<tr>
 							<th>아이디</th>
-							<td>${member.loginId }</td>
+							<td>${rq.getLoginedMember().loginId }</td>
 						</tr>
 						<tr>
 							<th>새 비밀번호</th>
 							<td>
-								<input type="password" name="loginPw" placeholder="새 비밀번호를 입력하세요"/>
+								<input name="loginPw" type="text"
+									placeholder="새 비밀번호를 입력하세요" />
 							</td>
 						</tr>
 						<tr>
 							<th>새 비밀번호 확인</th>
 							<td>
-								<input type="password" name="checkLoginPw" placeholder="새 비밀번호를 입력하세요"/>
+								<input name="loginPwConfirm" type="text"
+									placeholder="새 비밀번호를 입력하세요" />
 							</td>
 						</tr>
 						<tr>
 							<th>이름</th>
 							<td>
-								<input required type="text" name="name"  value="${member.name }" />
+								<input required type="text" name="name"
+									value="${rq.getLoginedMember().name }" />
 							</td>
 						</tr>
 						<tr>
 							<th>닉네임</th>
 							<td>
-								<input required type="text" name="nickname"  value="${member.nickname }" />
+								<input required type="text" name="nickname"
+									value="${rq.getLoginedMember().nickname }" />
 							</td>
 						</tr>
 						<tr>
 							<th>전화번호</th>
 							<td>
-								<input required type="text" name="cellphoneNum"  value="${member.cellphoneNum }" />
+								<input required type="text" name="cellphoneNum"
+									value="${rq.getLoginedMember().cellphoneNum }" />
 							</td>
 						</tr>
 						<tr>
 							<th>이메일</th>
 							<td>
-								<input required type="text" name="email"  value="${member.email }" />
+								<input required type="text" name="email"
+									value="${rq.getLoginedMember().email }" />
 							</td>
 						</tr>
 						<tr>
 							<th></th>
 							<td>
-								<button type="submit">수정</button>
+								<input type="submit" value="수정" />
 							</td>
 						</tr>
 					</tbody>

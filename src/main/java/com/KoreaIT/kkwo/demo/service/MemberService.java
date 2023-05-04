@@ -57,7 +57,7 @@ public class MemberService {
 		ResultData actorCanDeleteRd = actorCanDelete(actorId, member);
 		member.setActorCanDelete(actorCanDeleteRd.isSuccess());
 	}
-
+	
 	/* 삭제 권한 체크 */
 	private ResultData actorCanDelete(int actorId, Member member) {
 		if (member == null) {
@@ -78,12 +78,8 @@ public class MemberService {
 		return ResultData.from("S-1", "수정 가능");
 	}
 
-	public ResultData modifyMember(int id, String loginPw, String name, String nickname, String cellphoneNum,
-			String email) {
+	public ResultData modifyMember(int id, String loginPw, String name, String nickname, String cellphoneNum, String email) {
 		memberRepository.modifyMember(id, loginPw, name, nickname, cellphoneNum, email);
-
-		Member member = getMemberById(id);
-
-		return ResultData.from("S-1", "회원정보를 수정했습니다", "Member", member);
+		return ResultData.from("S-1", "회원 정보 수정이 완료되었습니다");
 	}
 }
