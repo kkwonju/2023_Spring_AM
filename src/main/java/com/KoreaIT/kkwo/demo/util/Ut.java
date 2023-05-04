@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.Getter;
+
 public class Ut {
 	private HttpServletRequest req;
 	private HttpServletResponse resp;

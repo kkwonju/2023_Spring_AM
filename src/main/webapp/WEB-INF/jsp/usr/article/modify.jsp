@@ -14,7 +14,7 @@
 		form.title.value = form.title.value.trim();
 		form.body.value = form.body.value.trim();
 		
-		if (form.title.value.length < 2) {
+		if (form.title.value.length < 1) {
 			alert('제목 1글자 이상 입력');
 			form.title.focus();
 			return;

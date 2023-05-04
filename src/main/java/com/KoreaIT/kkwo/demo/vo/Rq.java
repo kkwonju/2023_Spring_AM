@@ -29,6 +29,8 @@ public class Rq {
 	private int loginedMemberId;
 	@Getter
 	private int loginedMemberAuthLevel;
+	@Getter
+	private String encodedUri;
 
 	private HttpServletRequest req;
 	private HttpServletResponse resp;

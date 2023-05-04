@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.Rq;
 
 /*
@@ -25,7 +26,8 @@ public class NeedLoginInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
 		
 		if(!rq.isLogined()) {
-			rq.printReplaceJs("로그인 후 이용해주세요", "../member/login");
+			String replaceUri = rq.getEncodedCurrentUri();
+			rq.printReplaceJs("로그인 후 이용해주세요", Ut.f("../member/login?replaceUri=%s", replaceUri));
 			return false;
 		}
 		
