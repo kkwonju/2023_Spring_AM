@@ -76,9 +76,9 @@
 					</a>
 				</li>
 				<c:choose>
-					<c:when test="${!rq.isLogined()}">
+					<c:when test="${!rq.logined}">
 						<li class="hover:underline">
-							<a class="h-full px-3 flex items-center" href="/usr/member/login?replaceUri=${rq.encodedCurrentUri}">
+							<a class="h-full px-3 flex items-center" href="${rq.loginUri}">
 								<span>LOGIN</span>
 							</a>
 						</li>
@@ -92,7 +92,7 @@
 						</li>
 						<li class="hover:underline">
 							<a class="h-full px-3 flex items-center"
-								href="/usr/member/logout">
+								href="/usr/member/logout?replaceUri=${rq.encodedCurrentUri}">
 								<span>LOGOUT</span>
 							</a>
 						</li>

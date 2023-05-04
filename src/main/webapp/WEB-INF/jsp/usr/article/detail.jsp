@@ -71,7 +71,7 @@
 				<a class="my_btn" href="../article/modify?id=${article.id }">수정</a>
 			</c:if>
 			<c:if test="${article.actorCanDelete}">
-				<a class="my_btn" href="../article/delete?id=${article.id }"
+				<a class="my_btn" href="../article/delete?id=${article.id }&boardId=${article.boardId}"
 					onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a>
 			</c:if>
 		</div>
@@ -211,7 +211,7 @@
 				</form>
 			</c:if>
 			<c:if test="${rq.notLogined}">
-				<a href="/usr/member/login" class="my_btn">로그인</a> 후 이용
+				<a href="${rq.loginUri}" class="my_btn">로그인</a> 후 이용
 			</c:if>
 		</div>
 	</div>

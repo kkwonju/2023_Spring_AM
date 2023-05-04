@@ -107,6 +107,9 @@ select {
 	justify-content: flex-end;
 }
 
+.fa-java {
+	font-size: 1.2em;
+}
 /* 커스텀 */
 table {
 	width: 100%;

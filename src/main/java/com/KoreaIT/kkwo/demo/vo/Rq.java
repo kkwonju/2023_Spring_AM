@@ -1,11 +1,13 @@
 package com.KoreaIT.kkwo.demo.vo;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.taglibs.standard.tag.common.sql.QueryTagSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -31,15 +33,21 @@ public class Rq {
 	private int loginedMemberAuthLevel;
 	@Getter
 	private String encodedUri;
-
+	
 	private HttpServletRequest req;
 	private HttpServletResponse resp;
 	private HttpSession session;
 
+	private Map<String, String> paramMap;
+
 	public Rq(HttpServletRequest req, HttpServletResponse resp, MemberService memberService) {
 		this.req = req;
 		this.resp = resp;
+		
 		this.session = req.getSession();
+		
+		paramMap = Ut.getParamMap(req);
+		
 		this.memberService = memberService;
 
 		int loginedMemberId = 0;
@@ -122,9 +130,7 @@ public class Rq {
 		return currentUri;
 	}
 	
-	public String getEncodedCurrentUri() {
-		return Ut.getEncodedCurrentUri(getCurrentUri());
-	}
+
 	
 	// Rq 객체 유도
 	// 삭제 x, BeforeActionInterceptor에서 강제 호출
@@ -137,5 +143,26 @@ public class Rq {
 
 	public void run() {
 		System.out.println("===========================run A");
+	}
+	
+	public String getLoginUri() {
+		return "../member/login?replaceUri=" + getReplaceUri();
+	}
+	
+	private String getReplaceUri() {
+//		로그인 후 접근 불가 페이지
+		String requestUri = req.getRequestURI();
+		
+		switch(requestUri) {
+		case "/usr/member/login":
+		case "/usr/member/join":
+			return Ut.getEncodedUri(paramMap.get("replaceUri"));
+		}
+		
+		return getEncodedCurrentUri();
+	}
+	
+	public String getEncodedCurrentUri() {
+		return Ut.getEncodedCurrentUri(getCurrentUri());
 	}
 }

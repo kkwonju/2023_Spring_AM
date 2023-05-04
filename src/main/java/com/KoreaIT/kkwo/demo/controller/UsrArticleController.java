@@ -177,7 +177,7 @@ public class UsrArticleController {
 	/* 게시글 삭제 */
 	@RequestMapping("/usr/article/delete")
 	@ResponseBody
-	public String doDelete(int id) {
+	public String doDelete(int id, int boardId) {
 
 		Article article = articleService.getArticle(id);
 
@@ -191,6 +191,6 @@ public class UsrArticleController {
 
 		articleService.deleteArticle(id);
 
-		return Ut.jsReplace("S-1", Ut.f("%d번 글을 삭제했습니다", id), "../article/list?boardId=1");
+		return Ut.jsReplace("S-1", Ut.f("%d번 글을 삭제했습니다", id), Ut.f("../article/list?boardId=%d", boardId));
 	}
 }

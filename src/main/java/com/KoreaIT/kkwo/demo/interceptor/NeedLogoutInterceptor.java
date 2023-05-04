@@ -18,7 +18,7 @@ public class NeedLogoutInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
 		
 		if(rq.isLogined()) {
-			rq.printReplaceJs("로그아웃 후 이용해주세요", "../member/login");
+			rq.printReplaceJs("로그아웃 후 이용해주세요", rq.getEncodedCurrentUri());
 			return false;
 		}
 		

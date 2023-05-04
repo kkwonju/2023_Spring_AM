@@ -2,11 +2,12 @@ package com.KoreaIT.kkwo.demo.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import lombok.Getter;
 
 public class Ut {
 	private HttpServletRequest req;
@@ -110,5 +111,23 @@ public class Ut {
 			e.printStackTrace();
 			return uri;
 		}
+	}
+
+	/*
+	 * 
+	 * 
+	 */
+	public static Map<String, String> getParamMap(HttpServletRequest req) {
+		Map<String, String> param = new HashMap<>(); // HashMap 생성
+		
+		Enumeration<String> parameterNames = req.getParameterNames(); // 열거 , 파라미터 이름 열거
+		
+		while(parameterNames.hasMoreElements()){ // hasMoreElements() : 토큰 개념, 다음 것이 없으면 그만 , 있으면 계속
+			String paramName = parameterNames.nextElement();
+			String paramValue = req.getParameter(paramName);
+			
+			param.put(paramName, paramValue);
+		}
+		return param;
 	}
 }
