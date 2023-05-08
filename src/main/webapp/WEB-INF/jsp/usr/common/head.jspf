@@ -78,6 +78,11 @@
 				<c:choose>
 					<c:when test="${!rq.logined}">
 						<li class="hover:underline">
+							<a class="h-full px-3 flex items-center" href="/usr/member/join">
+								<span>SIGN UP</span>
+							</a>
+						</li>
+						<li class="hover:underline">
 							<a class="h-full px-3 flex items-center" href="${rq.loginUri}">
 								<span>LOGIN</span>
 							</a>

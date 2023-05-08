@@ -24,42 +24,46 @@ public class UsrMemberController {
 	private Rq rq;
 
 	@RequestMapping("/usr/member/join")
+	public String showJoinForm() {
+		return "usr/member/join";
+	}
+	
+	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public ResultData<Member> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
-			String email) {
+	public String doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
+			String email, @RequestParam(defaultValue = "/") String replaceUri) {
 
 		if (rq.isLogined()) {
-			return ResultData.from("F-0", "로그아웃 후 이용해주세요");
+			return Ut.jsHistoryBack("F-0", "로그아웃 후 이용해주세요");
 		}
-
 		if (Ut.empty(loginId)) {
-			return ResultData.from("F-1", "아이디를 입력해주세요");
+			return Ut.jsHistoryBack("F-1", "아이디를 입력해주세요");
 		}
 		if (Ut.empty(loginPw)) {
-			return ResultData.from("F-2", "비밀번호를 입력해주세요");
+			return Ut.jsHistoryBack("F-2", "비밀번호를 입력해주세요");
 		}
 		if (Ut.empty(name)) {
-			return ResultData.from("F-3", "이름을 입력해주세요");
+			return Ut.jsHistoryBack("F-3", "이름을 입력해주세요");
 		}
 		if (Ut.empty(nickname)) {
-			return ResultData.from("F-4", "닉네임을 입력해주세요");
+			return Ut.jsHistoryBack("F-4", "닉네임을 입력해주세요");
 		}
 		if (Ut.empty(cellphoneNum)) {
-			return ResultData.from("F-5", "전화번호를 입력해주세요");
+			return Ut.jsHistoryBack("F-5", "전화번호를 입력해주세요");
 		}
 		if (Ut.empty(email)) {
-			return ResultData.from("F-6", "이메일을 입력해주세요");
+			return Ut.jsHistoryBack("F-6", "이메일을 입력해주세요");
 		}
 
 		ResultData<Integer> joinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 
 		if (joinRd.isFail()) {
-			return (ResultData) joinRd;
+			return Ut.jsHistoryBack(joinRd.getResultCode(), joinRd.getMsg());
 		}
 
-		Member member = memberService.getMemberById(joinRd.getData1());
+		String afterJoinUri = "../member/login?afterLoginUri=" + Ut.getEncodedUri(replaceUri);
 
-		return ResultData.newData(joinRd, "Member", member);
+		return Ut.jsReplace("S-1", Ut.f("회원가입이 완료되었습니다"), afterJoinUri);
 	}
 
 	@RequestMapping("/usr/member/login")
@@ -70,7 +74,6 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
 	public String doLogin(HttpSession httpSession, String loginId, String loginPw, @RequestParam(defaultValue = "/") String replaceUri) {
-
 		if (rq.isLogined()) {
 			return Ut.jsHistoryBack("F-0", "이미 로그인 상태입니다");
 		}
@@ -94,6 +97,10 @@ public class UsrMemberController {
 		}
 
 		rq.login(member);
+		
+		if(!replaceUri.startsWith("%")) {
+			replaceUri = "/";
+		}
 
 		return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), replaceUri);
 	}

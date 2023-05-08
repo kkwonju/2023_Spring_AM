@@ -25,6 +25,8 @@
 
 			if (form.loginPw.value != form.loginPwConfirm.value) {
 				alert('비번 불일치');
+				form.loginPw.value = "";
+				form.loginPwConfirm.value = "";
 				form.loginPw.focus();
 				return;
 			}

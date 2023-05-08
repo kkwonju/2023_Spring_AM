@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import com.KoreaIT.kkwo.demo.repository.MemberRepository;
 import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.Member;
-import com.KoreaIT.kkwo.demo.vo.Reply;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 
 @Service
@@ -28,9 +27,10 @@ public class MemberService {
 		}
 
 		memberRepository.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
-		int id = memberRepository.getLastInsertId();
 
-		return ResultData.from("S-1", "가입되었습니다", "id", id);
+		int id = memberRepository.getLastInsertId();
+		
+		return ResultData.from("S-1", "가입 성공", "id", id);
 	}
 
 	public Member getMemberById(int id) {

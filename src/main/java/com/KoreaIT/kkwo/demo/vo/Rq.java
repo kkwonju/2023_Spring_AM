@@ -33,7 +33,7 @@ public class Rq {
 	private int loginedMemberAuthLevel;
 	@Getter
 	private String encodedUri;
-	
+
 	private HttpServletRequest req;
 	private HttpServletResponse resp;
 	private HttpSession session;
@@ -43,11 +43,11 @@ public class Rq {
 	public Rq(HttpServletRequest req, HttpServletResponse resp, MemberService memberService) {
 		this.req = req;
 		this.resp = resp;
-		
+
 		this.session = req.getSession();
-		
+
 		paramMap = Ut.getParamMap(req);
-		
+
 		this.memberService = memberService;
 
 		int loginedMemberId = 0;
@@ -66,7 +66,7 @@ public class Rq {
 		this.loginedMemberId = loginedMemberId;
 		this.loginedMember = loginedMember;
 		this.loginedMemberAuthLevel = loginedMemberAuthLevel;
-		
+
 		this.req.setAttribute("rq", this);
 	}
 
@@ -81,13 +81,13 @@ public class Rq {
 		req.setAttribute("locationReload", true);
 		return "usr/common/js";
 	}
-	
+
 	public String jsReplaceOnView(String msg, String replaceUri) {
 		req.setAttribute("msg", msg);
 		req.setAttribute("replaceUri", replaceUri);
 		return "usr/common/js";
 	}
-	
+
 	public void printHistoryBackJs(String msg) throws IOException {
 		resp.setContentType("text/html; charset=UTF-8;");
 		print(Ut.jsHistoryBack("F-B", msg));
@@ -117,26 +117,28 @@ public class Rq {
 	public void logout() {
 		session.removeAttribute("loginedMemberId");
 	}
-	
+
 	// uri 가져오기
 	public String getCurrentUri() {
 		String currentUri = req.getRequestURI();
 		String queryString = req.getQueryString();
-		
-		if(queryString != null && queryString.length() > 0) {
+
+		System.out.println(currentUri);
+		System.out.println(queryString);
+
+		if (queryString != null && queryString.length() > 0) {
 			currentUri += "?" + queryString;
 		}
-		
+
+		System.out.println(currentUri);
 		return currentUri;
 	}
-	
 
-	
 	// Rq 객체 유도
 	// 삭제 x, BeforeActionInterceptor에서 강제 호출
 	public void initOnBeforeActionInterceptor() {
 	}
-	
+
 	public boolean isNotLogined() {
 		return !isLogined;
 	}
@@ -144,21 +146,38 @@ public class Rq {
 	public void run() {
 		System.out.println("===========================run A");
 	}
+
 	
 	public String getLoginUri() {
-		return "../member/login?replaceUri=" + getReplaceUri();
+		return "../member/login?afterLoginUri=" + getAfterLoginUri();
 	}
-	
-	private String getReplaceUri() {
-//		로그인 후 접근 불가 페이지
+
+	public String getLogoutUri() {
 		String requestUri = req.getRequestURI();
-		
-		switch(requestUri) {
+
+		switch (requestUri) {
+		case "/usr/article/write":
+			return "../member/doLogout?afterLogoutUri=" + "/";
+		}
+
+		return "../member/doLogout?afterLogoutUri=" + getAfterLogoutUri();
+	}
+
+	public String getAfterLogoutUri() {
+		return getEncodedCurrentUri();
+	}
+
+	private String getAfterLoginUri() {
+//		로그인 후 접근 불가 페이지
+
+		String requestUri = req.getRequestURI();
+
+		switch (requestUri) {
 		case "/usr/member/login":
 		case "/usr/member/join":
-			return Ut.getEncodedUri(paramMap.get("replaceUri"));
+			return Ut.getEncodedUri(Ut.getAttr(paramMap, "afterLoginUri", ""));
 		}
-		
+
 		return getEncodedCurrentUri();
 	}
 	

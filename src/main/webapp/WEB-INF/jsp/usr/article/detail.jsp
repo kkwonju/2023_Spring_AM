@@ -191,6 +191,7 @@
 					<table border="1">
 						<input type="hidden" name="relTypeCode" value="article" />
 						<input type="hidden" name="relId" value="${article.id}" />
+						<input type="hidden" name="replaceUri" value="${rq.currentUri }" />
 						<colgroup>
 							<col width="500" />
 							<col width="400" />
@@ -252,8 +253,11 @@
 						<td align="left">${reply.body}</td>
 						<td>
 							<c:if test="${reply.actorCanModify}">
-								<a class="my_btn" href="../reply/modify?id=${reply.id }">수정</a>
+								<a class="btn-text-link btn btn-active btn-ghost"
+									href="../reply/modify?id=${reply.id }&replaceUri=${rq.encodedCurrentUri}">수정</a>
 							</c:if>
+							
+							
 						</td>
 						<td>
 							<c:if test="${reply.actorCanDelete}">
