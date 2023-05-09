@@ -8,8 +8,8 @@
 <section class="mt-8 text-xl">
 	<div class="container mx-auto px-3">
 		<div class="table-box-type-1">
-			<form action="../member/doLogin" method="POST">
-				<input type="hidden" name="replaceUri" value="${param.replaceUri}"/>
+			<form name="loginForm" action="../member/doLogin" method="POST">
+				<input type="hidden" name="replaceUri" value="${param.replaceUri}" />
 				<table border="1">
 					<colgroup>
 						<col width="200" />
@@ -17,11 +17,15 @@
 					<tbody>
 						<tr>
 							<th>아이디</th>
-							<td><input autocomplete="off" autofocus type="text" name="loginId" /></td>
+							<td>
+								<input autocomplete="off" autofocus type="text" name="loginId" />
+							</td>
 						</tr>
 						<tr>
 							<th>비밀번호</th>
-							<td><input type="password" name="loginPw" /></td>
+							<td>
+								<input type="password" name="loginPw" />
+							</td>
 						</tr>
 						<tr>
 							<th></th>

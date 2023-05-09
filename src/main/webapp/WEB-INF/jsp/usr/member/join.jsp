@@ -3,9 +3,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="pageTitle" value="MEMBER SIGN UP" />
 <%@ include file="../common/head.jspf"%>
-
+<style>
+#loginIdCheckMsg {
+	color: red;
+	font-size: 0.8rem;
+}
+</style>
 <script type="text/javascript">
 	let MemberJoin_submitFormDone = false;
+	let validLoginId = ''; // 사용 가능한 로그인 아이디 지정
 
 	function MemberJoin_submit(form) {
 		if (MemberJoin_submitFormDone) {
@@ -20,7 +26,6 @@
 				alert('비번 확인 써라');
 				form.loginPwConfirm.focus();
 				return;
-
 			}
 
 			if (form.loginPw.value != form.loginPwConfirm.value) {
@@ -59,8 +64,30 @@
 
 		MemberJoin_submitFormDone = true;
 		form.submit();
-
 	}
+
+	$(document).ready(function() {
+		$('.inputLoginId').on('blur', function checkLoginIdDup() { // checkLoginIdDup(el) el제거
+			$('.loginIdCheckMsg').empty();
+			
+			const form = $(this).closest('form').get(0); // closest 현재 엘리먼트에서 가장 가까운 것 중 첫번째
+	
+			if (form.loginId.value.length == 0) {
+				validLoginId = '';
+				return;
+			}
+	
+			$.get("../member/getLoginIdDup", {
+				isAjax : 'Y',
+				loginId : form.loginId.value
+	
+			}, function(data) {
+	
+				$('.loginIdCheckMsg').html(data.msg);
+	
+			}, 'json');
+		});
+	});
 </script>
 <hr />
 <section class="mt-8 text-xl">
@@ -76,13 +103,18 @@
 						<tr>
 							<th>로그인 아이디</th>
 							<td>
-								<input required name="loginId" type="text" placeholder="아이디를 입력하세요" />
+<!-- 								<input onkeyup="checkLoginIdDup(this);" name="loginId"  --> 
+								<input class="inputLoginId" name="loginId"
+									type="text" placeholder="아이디를 입력하세요" autocomplete="off" />
+								<br />
+								<span class="loginIdCheckMsg"></span>
 							</td>
 						</tr>
 						<tr>
 							<th>비밀번호</th>
 							<td>
-								<input required name="loginPw" type="password" placeholder="비밀번호를 입력하세요" />
+								<input required name="loginPw" type="password"
+									placeholder="비밀번호를 입력하세요" />
 							</td>
 						</tr>
 						<tr>
@@ -95,25 +127,28 @@
 						<tr>
 							<th>이름</th>
 							<td>
-								<input required type="text" name="name" placeholder="이름을 입력하세요"/>
+								<input required type="text" name="name" placeholder="이름을 입력하세요" />
 							</td>
 						</tr>
 						<tr>
 							<th>닉네임</th>
 							<td>
-								<input required type="text" name="nickname" placeholder="닉네임을 입력하세요"/>
+								<input required type="text" name="nickname"
+									placeholder="닉네임을 입력하세요" />
 							</td>
 						</tr>
 						<tr>
 							<th>전화번호</th>
 							<td>
-								<input required type="text" name="cellphoneNum" placeholder="전화번호를 입력하세요"/>
+								<input required type="text" name="cellphoneNum"
+									placeholder="전화번호를 입력하세요" />
 							</td>
 						</tr>
 						<tr>
 							<th>이메일</th>
 							<td>
-								<input required type="email" name="email" placeholder="이메일을 입력하세요"/>
+								<input required type="email" name="email"
+									placeholder="이메일을 입력하세요" />
 							</td>
 						</tr>
 						<tr>

@@ -1,5 +1,8 @@
 package com.KoreaIT.kkwo.demo.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +72,23 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/login")
 	public String showLoginForm(Model model) {
 		return "usr/member/login";
+	}
+	
+	@RequestMapping("/usr/member/getLoginIdDup")
+	@ResponseBody
+	public ResultData getLoginIdDup(String loginId) {
+		
+		if(Ut.empty(loginId)) {
+			return ResultData.from("F-1", "아이디를 입력해주세요");
+		}
+
+		Member existsMember = memberService.getMemberByLoginId(loginId);
+		
+		if (existsMember != null) {
+			return	ResultData.from("F-2", "해당 아이디는 이미 사용중입니다");
+		}
+		
+		return ResultData.from("S-1", "이용 가능한 아이디입니다", "loginId", loginId);
 	}
 
 	@RequestMapping("/usr/member/doLogin")

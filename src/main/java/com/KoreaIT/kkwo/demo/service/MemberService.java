@@ -15,7 +15,7 @@ public class MemberService {
 
 	public ResultData<Integer> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
-		Member existsMember = memberRepository.getMemberByLoginId(loginId);
+		Member existsMember = getMemberByLoginId(loginId);
 		if (existsMember != null) {
 			return ResultData.from("F-7", Ut.f("이미 가입된 아이디입니다 [%s]", loginId));
 		}
