@@ -5,14 +5,22 @@
 <%@ include file="../common/head.jspf"%>
 <style>
 .loginIdCheckMsg {
-	color: red;
 	font-size: 0.8rem;
 }
+
+.col_green {
+	color: #1dc449;
+}
+
+.col_red {
+	color: red;
+}
+
 </style>
 <script type="text/javascript">
 	let submitJoinFormDone = false;
 	let validLoginId = "";
-	
+
 	function submitJoinForm(form) {
 		if (submitJoinFormDone) {
 			alert('처리중입니다');
@@ -63,21 +71,21 @@
 			alert('전화번호를 입력해주세요');
 			return;
 		}
-		
+
 		submitJoinFormDone = true;
 		form.submit();
 	}
-	
+
 	$(document).ready(function() {
 		$('.inputLoginId').on('blur', function checkLoginIdDup() { // checkLoginIdDup(el) el제거
-// 			$('.loginIdCheckMsg').empty();
+		// 			$('.loginIdCheckMsg').empty();
 
 			const form = $(this).closest('form').get(0); // closest 현재 엘리먼트에서 가장 가까운 것 중 첫번째
 
-// 			if (form.loginId.value.length == 0) {
-// 				validLoginId = '';
-// 				return;
-// 			}
+			// 			if (form.loginId.value.length == 0) {
+			// 				validLoginId = '';
+			// 				return;
+			// 			}
 
 			$.get("../member/getLoginIdDup", {
 				isAjax : 'Y',
@@ -85,10 +93,11 @@
 
 			}, function(data) {
 
-				$('.loginIdCheckMsg').html(data.msg);
 				if (data.success) {
+					$('.loginIdCheckMsg').html('<span class="col_green">' + data.msg + '</span>');
 					validLoginId = data.data1;
 				} else {
+					$('.loginIdCheckMsg').html('<span class="col_red">' + data.msg + '</span>');
 					validLoginId = '';
 				}
 			}, 'json');
@@ -112,7 +121,8 @@
 								<!-- 								<input onkeyup="checkLoginIdDup(this);" name="loginId"  -->
 								<input class="inputLoginId" name="loginId" maxlength=20
 									type="text" placeholder="아이디를 입력하세요" autocomplete="off" />
-									<span style="font-size: 0.95rem; position: absolute; transform: translate(-100px, 8px); opacity: 0.6;">@clance.com</span>
+								<span
+									style="font-size: 0.95rem; position: absolute; transform: translate(-100px, 8px); opacity: 0.6;">@clance.com</span>
 								<br />
 								<span class="loginIdCheckMsg"> </span>
 							</td>
