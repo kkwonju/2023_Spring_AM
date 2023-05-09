@@ -4,87 +4,93 @@
 <c:set var="pageTitle" value="MEMBER SIGN UP" />
 <%@ include file="../common/head.jspf"%>
 <style>
-#loginIdCheckMsg {
+.loginIdCheckMsg {
 	color: red;
 	font-size: 0.8rem;
 }
 </style>
 <script type="text/javascript">
-	let MemberJoin_submitFormDone = false;
-	let validLoginId = ''; // 사용 가능한 로그인 아이디 지정
-
-	function MemberJoin_submit(form) {
-		if (MemberJoin_submitFormDone) {
+	let submitJoinFormDone = false;
+	let validLoginId = "";
+	
+	function submitJoinForm(form) {
+		if (submitJoinFormDone) {
+			alert('처리중입니다');
+			return;
+		}
+		form.loginId.value = form.loginId.value.trim();
+		if (form.loginId.value == 0) {
+			alert('아이디를 입력해주세요');
+			return;
+		}
+		if (form.loginId.value != validLoginId) {
+			alert('사용할 수 없는 아이디야');
+			form.loginId.focus();
 			return;
 		}
 		form.loginPw.value = form.loginPw.value.trim();
-
-		if (form.loginPw.value.length > 0) {
-			form.loginPwConfirm.value = form.loginPwConfirm.value.trim();
-
-			if (form.loginPwConfirm.value.length == 0) {
-				alert('비번 확인 써라');
-				form.loginPwConfirm.focus();
-				return;
-			}
-
-			if (form.loginPw.value != form.loginPwConfirm.value) {
-				alert('비번 불일치');
-				form.loginPw.value = "";
-				form.loginPwConfirm.value = "";
-				form.loginPw.focus();
-				return;
-			}
+		if (form.loginPw.value == 0) {
+			alert('비밀번호를 입력해주세요');
+			return;
 		}
-
+		form.loginPwConfirm.value = form.loginPwConfirm.value.trim();
+		if (form.loginPwConfirm.value == 0) {
+			alert('비밀번호 확인을 입력해주세요');
+			return;
+		}
+		if (form.loginPwConfirm.value != form.loginPw.value) {
+			alert('비밀번호가 일치하지 않습니다');
+			form.loginPw.focus();
+			return;
+		}
 		form.name.value = form.name.value.trim();
+		if (form.name.value == 0) {
+			alert('이름을 입력해주세요');
+			return;
+		}
 		form.nickname.value = form.nickname.value.trim();
-		form.cellphoneNum.value = form.cellphoneNum.value.trim();
+		if (form.nickname.value == 0) {
+			alert('닉네임을 입력해주세요');
+			return;
+		}
 		form.email.value = form.email.value.trim();
-
-		if (form.name.value.length == 0) {
-			alert('이름 써라');
-			form.name.focus();
+		if (form.email.value == 0) {
+			alert('이메일을 입력해주세요');
+			return;
 		}
-
-		if (form.nickname.value.length == 0) {
-			alert('nickname 써라');
-			form.nickname.focus();
+		form.cellphoneNum.value = form.cellphoneNum.value.trim();
+		if (form.cellphoneNum.value == 0) {
+			alert('전화번호를 입력해주세요');
+			return;
 		}
-
-		if (form.cellphoneNum.value.length == 0) {
-			alert('cellphoneNum 써라');
-			form.cellphoneNum.focus();
-		}
-
-		if (form.email.value.length == 0) {
-			alert('email 써라');
-			form.email.focus();
-		}
-
-		MemberJoin_submitFormDone = true;
+		
+		submitJoinFormDone = true;
 		form.submit();
 	}
-
+	
 	$(document).ready(function() {
 		$('.inputLoginId').on('blur', function checkLoginIdDup() { // checkLoginIdDup(el) el제거
-			$('.loginIdCheckMsg').empty();
-			
+// 			$('.loginIdCheckMsg').empty();
+
 			const form = $(this).closest('form').get(0); // closest 현재 엘리먼트에서 가장 가까운 것 중 첫번째
-	
-			if (form.loginId.value.length == 0) {
-				validLoginId = '';
-				return;
-			}
-	
+
+// 			if (form.loginId.value.length == 0) {
+// 				validLoginId = '';
+// 				return;
+// 			}
+
 			$.get("../member/getLoginIdDup", {
 				isAjax : 'Y',
 				loginId : form.loginId.value
-	
+
 			}, function(data) {
-	
+
 				$('.loginIdCheckMsg').html(data.msg);
-	
+				if (data.success) {
+					validLoginId = data.data1;
+				} else {
+					validLoginId = '';
+				}
 			}, 'json');
 		});
 	});
@@ -103,11 +109,12 @@
 						<tr>
 							<th>로그인 아이디</th>
 							<td>
-<!-- 								<input onkeyup="checkLoginIdDup(this);" name="loginId"  --> 
-								<input class="inputLoginId" name="loginId"
+								<!-- 								<input onkeyup="checkLoginIdDup(this);" name="loginId"  -->
+								<input class="inputLoginId" name="loginId" maxlength=20
 									type="text" placeholder="아이디를 입력하세요" autocomplete="off" />
+									<span style="font-size: 0.95rem; position: absolute; transform: translate(-100px, 8px); opacity: 0.6;">@clance.com</span>
 								<br />
-								<span class="loginIdCheckMsg"></span>
+								<span class="loginIdCheckMsg"> </span>
 							</td>
 						</tr>
 						<tr>

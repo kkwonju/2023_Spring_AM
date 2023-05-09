@@ -79,13 +79,17 @@ public class UsrMemberController {
 	public ResultData getLoginIdDup(String loginId) {
 		
 		if(Ut.empty(loginId)) {
-			return ResultData.from("F-1", "아이디를 입력해주세요");
+			return ResultData.from("F-1", "필수 정보입니다");
 		}
-
+		
+		if(loginId.length() < 5) {
+			return ResultData.from("F-2", "5 ~ 20자 이내로 입력해주세요");
+		}
+		
 		Member existsMember = memberService.getMemberByLoginId(loginId);
 		
 		if (existsMember != null) {
-			return	ResultData.from("F-2", "해당 아이디는 이미 사용중입니다");
+			return	ResultData.from("F-3", "이미 사용 중인 아이디입니다");
 		}
 		
 		return ResultData.from("S-1", "이용 가능한 아이디입니다", "loginId", loginId);
