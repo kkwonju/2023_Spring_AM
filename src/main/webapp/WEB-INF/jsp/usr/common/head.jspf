@@ -90,8 +90,8 @@
 					</c:when>
 					<c:otherwise>
 						<li class="hover:underline">
-							<a class="h-full px-3 flex items-center" 
-							   href="/usr/member/myPage">
+							<a class="h-full px-3 flex items-center"
+								href="/usr/member/myPage">
 								<span>MY PAGE</span>
 							</a>
 						</li>
@@ -103,6 +103,11 @@
 						</li>
 					</c:otherwise>
 				</c:choose>
+				<li class="hover:underline">
+					<a class="h-full px-3 flex items-center" href="../home/APITest4">
+						<span>API</span>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</header>
@@ -112,13 +117,15 @@
 		</div>
 		<div class="searchBox">
 			<form action="../article/list" class="searchForm" method="GET">
-				<select data-value="${param.searchKeywordTypeCode}" name="searchKeywordTypeCode">
+				<select data-value="${param.searchKeywordTypeCode}"
+					name="searchKeywordTypeCode">
 					<option value="title">제목</option>
 					<option value="body">내용</option>
 					<option value="nickname">닉네임</option>
 				</select>
-				<input type="hidden" name="boardId" value="${param.boardId}"/>
-				<input type="text" name="searchKeyword" value="${param.searchKeyword}"/>
+				<input type="hidden" name="boardId" value="${param.boardId}" />
+				<input type="text" name="searchKeyword"
+					value="${param.searchKeyword}" />
 				<button type="submit">검색</button>
 			</form>
 		</div>
