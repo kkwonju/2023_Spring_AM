@@ -233,3 +233,34 @@ textarea {
 	background-color: white;
 	height: 20px;
 }
+
+/* 다크모드 */
+.dkm {
+	width: 60px;
+	height: 60px;
+	border-radius: 50px;
+}
+
+.sun_moon {
+	position: absolute;
+	top: 10px;
+	background-color: yellow;
+}
+
+.shadow {
+	display: none;
+	position: absolute;
+	top: 10px;
+	background-color: black;
+	transform: translate(-45px, -45px);
+	
+}
+
+.active {
+	
+}
+
+.darkMode.active > .shadow {
+	display: block;
+	transform: translate(-10px, -10px);
+}

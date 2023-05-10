@@ -1,8 +1,5 @@
 package com.KoreaIT.kkwo.demo.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.KoreaIT.kkwo.demo.service.MemberService;
 import com.KoreaIT.kkwo.demo.util.Ut;
 import com.KoreaIT.kkwo.demo.vo.Member;
-import com.KoreaIT.kkwo.demo.vo.Reply;
 import com.KoreaIT.kkwo.demo.vo.ResultData;
 import com.KoreaIT.kkwo.demo.vo.Rq;
 
@@ -29,6 +25,27 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/join")
 	public String showJoinForm() {
 		return "usr/member/join";
+	}
+	
+	@RequestMapping("/usr/member/getLoginIdDup")
+	@ResponseBody
+	public ResultData getLoginIdDup(String loginId) {
+		
+		if(Ut.empty(loginId)) {
+			return ResultData.from("F-1", "필수 정보입니다");
+		}
+		
+		if(loginId.length() < 5) {
+			return ResultData.from("F-2", "5 ~ 20자 이내로 입력해주세요");
+		}
+		
+		Member existsMember = memberService.getMemberByLoginId(loginId);
+		
+		if (existsMember != null) {
+			return	ResultData.from("F-3", "이미 사용 중인 아이디입니다");
+		}
+		
+		return ResultData.from("S-1", "이용 가능한 아이디입니다", "loginId", loginId);
 	}
 	
 	@RequestMapping("/usr/member/doJoin")
@@ -74,27 +91,6 @@ public class UsrMemberController {
 		return "usr/member/login";
 	}
 	
-	@RequestMapping("/usr/member/getLoginIdDup")
-	@ResponseBody
-	public ResultData getLoginIdDup(String loginId) {
-		
-		if(Ut.empty(loginId)) {
-			return ResultData.from("F-1", "필수 정보입니다");
-		}
-		
-		if(loginId.length() < 5) {
-			return ResultData.from("F-2", "5 ~ 20자 이내로 입력해주세요");
-		}
-		
-		Member existsMember = memberService.getMemberByLoginId(loginId);
-		
-		if (existsMember != null) {
-			return	ResultData.from("F-3", "이미 사용 중인 아이디입니다");
-		}
-		
-		return ResultData.from("S-1", "이용 가능한 아이디입니다", "loginId", loginId);
-	}
-
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
 	public String doLogin(HttpSession httpSession, String loginId, String loginPw, @RequestParam(defaultValue = "/") String replaceUri) {
@@ -116,7 +112,7 @@ public class UsrMemberController {
 			return Ut.jsHistoryBack("F-3", Ut.f("%s는 존재하지 않는 아이디입니다", loginId));
 		}
 
-		if (!member.getLoginPw().equals(loginPw)) {
+		if (!member.getLoginPw().equals(Ut.sha256(loginPw))) {
 			return Ut.jsHistoryBack("F-4", "비밀번호가 일치하지 않습니다");
 		}
 

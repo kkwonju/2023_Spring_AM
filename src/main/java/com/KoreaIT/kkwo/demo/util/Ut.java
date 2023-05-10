@@ -2,6 +2,8 @@ package com.KoreaIT.kkwo.demo.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +20,7 @@ public class Ut {
 		if (obj == null) {
 			return true;
 		}
-		
+
 		if (obj instanceof Integer) {
 			return (int) obj == 0;
 		}
@@ -41,7 +43,7 @@ public class Ut {
 		if (msg == null) {
 			msg = "";
 		}
-		
+
 		return Ut.f("""
 				<script>
 					const msg = '%s'.trim();
@@ -52,12 +54,12 @@ public class Ut {
 				</script>
 				""", msg);
 	}
-	
+
 	public static String jsLocationReload(String msg) {
 		if (msg == null) {
 			msg = "";
 		}
-		
+
 		return Ut.f("""
 				<script>
 					const msg = '%s'.trim();
@@ -103,7 +105,7 @@ public class Ut {
 			return currentUri;
 		}
 	}
-	
+
 	public static String getEncodedUri(String uri) {
 		try {
 			return URLEncoder.encode(uri, "UTF-8");
@@ -113,24 +115,20 @@ public class Ut {
 		}
 	}
 
-	/*
-	 * 
-	 * 
-	 */
 	public static Map<String, String> getParamMap(HttpServletRequest req) {
 		Map<String, String> param = new HashMap<>(); // HashMap 생성
-		
+
 		Enumeration<String> parameterNames = req.getParameterNames(); // 열거 , 파라미터 이름 열거
-		
-		while(parameterNames.hasMoreElements()){ // hasMoreElements() : 토큰 개념, 다음 것이 없으면 그만 , 있으면 계속
+
+		while (parameterNames.hasMoreElements()) { // hasMoreElements() : 토큰 개념, 다음 것이 없으면 그만 , 있으면 계속
 			String paramName = parameterNames.nextElement();
 			String paramValue = req.getParameter(paramName);
-			
+
 			param.put(paramName, paramValue);
 		}
 		return param;
 	}
-	
+
 	public static String getAttr(Map map, String attrName, String defaultValue) {
 
 		if (map.containsKey(attrName)) {
@@ -138,5 +136,23 @@ public class Ut {
 		}
 
 		return defaultValue;
+	}
+	
+	// sha256
+	public static String sha256(String password) {
+		try {
+			MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = messageDigest.digest(password.getBytes());
+			StringBuffer hexString = new StringBuffer();
+			for (int i = 0; i < hash.length; i++) {
+				String hex = Integer.toHexString(0xff & hash[i]);
+				if (hex.length() == 1)
+					hexString.append('0');
+				hexString.append(hex);
+			}
+			return hexString.toString();
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

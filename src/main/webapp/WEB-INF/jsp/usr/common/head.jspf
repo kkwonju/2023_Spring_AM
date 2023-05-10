@@ -108,6 +108,12 @@
 						<span>API</span>
 					</a>
 				</li>
+				<li>
+					<div class="darkMode">
+						<div class="dkm sun_moon"></div>
+						<div class="dkm shadow"></div>
+					</div>
+				</li>
 			</ul>
 		</div>
 	</header>

@@ -18,7 +18,7 @@ CREATE TABLE `member`(
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
     loginId CHAR(20) NOT NULL,
-    loginPw CHAR(60) NOT NULL,
+    loginPw CHAR(100) NOT NULL,
     `authLevel` SMALLINT(2) UNSIGNED DEFAULT 3 COMMENT '권한 레벨 (3=일반,7=관리자)',
     `name` CHAR(20) NOT NULL,
     nickname CHAR(20) NOT NULL,
@@ -277,7 +277,28 @@ relId = 3,
 ALTER TABLE reply ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE reply ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
+# 댓글 테이블에 인덱스 추가
 ALTER TABLE `Spring_AM`.`reply` ADD KEY `relTypeCodeId` (`relTypeCode`, `relId`);
+
+# 기존의 회원 비번을 암호화
+UPDATE `member`
+SET loginPw = 'pw1'
+WHERE id = 1;
+
+UPDATE `member`
+SET loginPw = 'pw2'
+WHERE id = 2;
+
+UPDATE `member`
+SET loginPw = 'pw3'
+WHERE id = 3;
+
+UPDATE `member`
+SET loginPw = SHA2(loginPw, 256);
+
+
+#################################
+#################################
 
 EXPLAIN SELECT R.*, M.nickname AS extra__writer
 FROM reply AS R
@@ -286,9 +307,6 @@ ON R.memberId = M.id
 WHERE R.relTypeCode = 'article'
 AND R.relId = 1
 ORDER BY R.id DESC;
-
-#################################
-#################################
 
 DESC article;
 
@@ -337,8 +355,8 @@ ORDER BY id DESC;
 # join 버전
 SELECT A.*,
 IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
-IFNULL(count(IF(RP.point > 0,RP.point,0)),0) AS extra__goodReactionPoint,
-IFNULL(count(IF(RP.point < 0,RP.point,0)),0) AS extra__badReactionPoint,
+IFNULL(COUNT(IF(RP.point > 0,RP.point,0)),0) AS extra__goodReactionPoint,
+IFNULL(COUNT(IF(RP.point < 0,RP.point,0)),0) AS extra__badReactionPoint,
 M.nickname
 FROM article AS A
 INNER JOIN `member` AS M 

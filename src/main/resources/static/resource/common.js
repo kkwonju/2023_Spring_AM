@@ -1,3 +1,4 @@
+
 $('select[data-value]').each(function(index, el) {
 	const $el = $(el);
 
@@ -8,21 +9,24 @@ $('select[data-value]').each(function(index, el) {
 	}
 });
 
-$('.popup-btn').click(function(){
-//	$('.layer').css('display','block');
+$('.popup-btn').click(function() {
+	//	$('.layer').css('display','block');
 	$('.layer').show();
 	$('.layer-bg').show();
 })
 
-$('.close-btn').click(function(){
-//	$('.layer').css('display','none');
+$('.close-btn').click(function() {
+	//	$('.layer').css('display','none');
 	$('.layer').hide();
 	$('.layer-bg').hide();
 })
 
-$('.layer-bg').click(function(){
-//	$('.layer').css('display','none');
+$('.layer-bg').click(function() {
+	//	$('.layer').css('display','none');
 	$('.layer').hide();
 	$('.layer-bg').hide();
 })
 
+$('.sun_moon').click(function() {
+	$('.darkMode').addClass('active')
+})
