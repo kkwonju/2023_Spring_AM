@@ -34,6 +34,16 @@
 								<button type="submit">로그인</button>
 							</td>
 						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<div class="findLoginInfo">
+									<a href="../member/findLoginId">아이디 찾기</a>
+									&nbsp;&nbsp;&nbsp;
+									<a href="../member/findLoginPw">비밀번호 찾기</a>
+								</div>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</form>

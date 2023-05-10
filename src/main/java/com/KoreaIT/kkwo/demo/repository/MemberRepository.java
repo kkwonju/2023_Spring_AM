@@ -37,6 +37,13 @@ public interface MemberRepository {
 			""")
 	public Member getMemberByNameAndEmail(String name, String email);
 
+	@Select("""
+			SELECT * 
+			FROM `member`
+			WHERE email = #{email}
+			""")
+	public Member getMemberByEamil(String email);
+	
 	@Select("SELECT LAST_INSERT_ID()")
 	public int getLastInsertId();
 	
@@ -65,4 +72,6 @@ public interface MemberRepository {
 			</script>
 			""")
 	public void modifyMember(int id, String loginPw, String name, String nickname, String cellphoneNum, String email);
+
+
 }

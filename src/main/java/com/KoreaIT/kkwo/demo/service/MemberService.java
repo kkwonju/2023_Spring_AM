@@ -45,6 +45,10 @@ public class MemberService {
 		return memberRepository.getMemberByNameAndEmail(name, email);
 	}
 
+	public Member getMemberByEamil(String email) {
+		return memberRepository.getMemberByEamil(email);
+	}
+	
 	// 손 댈 수 있는지 여부
 	private void controlForPrintData(int actorId, Member member) {
 		if (member == null) {
@@ -82,4 +86,6 @@ public class MemberService {
 		memberRepository.modifyMember(id, loginPw, name, nickname, cellphoneNum, email);
 		return ResultData.from("S-1", "회원 정보 수정이 완료되었습니다");
 	}
+
+
 }

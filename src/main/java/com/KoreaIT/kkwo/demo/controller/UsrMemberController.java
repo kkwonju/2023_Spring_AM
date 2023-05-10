@@ -91,6 +91,53 @@ public class UsrMemberController {
 		return "usr/member/login";
 	}
 	
+	@RequestMapping("/usr/member/findLoginId")
+	public String showFindLoginIdForm() {
+		return "usr/member/findLoginId";
+	}
+	
+	@RequestMapping("/usr/member/doFindLoginId")
+	public String doFindLoginId(String email) {
+		if (Ut.empty(email)) {
+			return rq.jsHistoryBackOnView("이메일을 입력해주세요");
+		}
+		
+		Member member = memberService.getMemberByEamil(email);
+
+		if (member == null) {
+			return rq.jsHistoryBackOnView(Ut.f("일치하는 이메일이 없습니다"));
+		}
+		
+		return rq.jsReplaceOnView( Ut.f("LoginId : %s", member.getLoginId()), "/usr/member/login");
+	}
+	
+	@RequestMapping("/usr/member/findLoginPw")
+	public String showFindLoginPwForm() {
+		return "usr/member/findLoginPw";
+	}
+	
+	@RequestMapping("/usr/member/doFindLoginPw")
+	public String doFindLoginPw(String loginId, String email) {
+		if (Ut.empty(loginId)) {
+			return Ut.jsHistoryBack("F-0", "아이디를 입력해주세요");
+		}
+		if (Ut.empty(email)) {
+			return Ut.jsHistoryBack("F-0", "이메일을 입력해주세요");
+		}
+		
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if (member == null) {
+			return rq.jsHistoryBackOnView(Ut.f("일치하는 아이디가 없습니다"));
+		}
+
+		if (!member.getEmail().equals(email)) {
+			return rq.jsHistoryBackOnView(Ut.f("일치하는 이메일이 없습니다"));
+		}
+		
+		return rq.jsReplaceOnView( Ut.f("LoginPw : %s", member.getLoginPw()), "/usr/member/login");
+	}
+	
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
 	public String doLogin(HttpSession httpSession, String loginId, String loginPw, @RequestParam(defaultValue = "/") String replaceUri) {
